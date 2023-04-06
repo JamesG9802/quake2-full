@@ -1674,6 +1674,13 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			VectorCopy (pm.viewangles, client->ps.viewangles);
 		}
 
+		client->v_angle[0] = 0;
+		client->v_angle[1] = 0;
+		client->v_angle[2] = 0;
+		client->ps.viewangles[0] = 0;
+		client->ps.viewangles[1] = 0;
+		client->ps.viewangles[2] = 0;
+		gi.dprintf("HELLO");
 		gi.linkentity (ent);
 
 		if (ent->movetype != MOVETYPE_NOCLIP)
