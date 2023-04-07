@@ -573,6 +573,13 @@ void SpawnEntities (char *mapname, char *entities, char *spawnpoint)
 		// remove things (except the world) from different skill levels or deathmatch
 		if (ent != g_edicts)
 		{
+			/*	IT 266	Unload all non-player and player-start entities	*/
+			if (!ent->client && Q_stricmp(ent->classname, "info_player_start") != 0)
+			{
+				G_FreeEdict(ent);
+				inhibit++;
+				continue;
+			}
 			if (deathmatch->value)
 			{
 				if ( ent->spawnflags & SPAWNFLAG_NOT_DEATHMATCH )
@@ -854,7 +861,7 @@ void SP_worldspawn (edict_t *ent)
 		gi.cvar_set("sv_gravity", "800");
 	else
 		gi.cvar_set("sv_gravity", st.gravity);
-	/*	IT 266	*/
+	/*	IT 266	set gravity to 0	*/
 	gi.cvar_set("sv_gravity", "0");
 	snd_fry = gi.soundindex ("player/fry.wav");	// standing in lava / slime
 

@@ -107,6 +107,10 @@ The normal starting point for a level.
 */
 void SP_info_player_start(edict_t *self)
 {
+	/*	IT 266	set player spawn position	*/
+	self->s.origin[0] = 227.875;
+	self->s.origin[1] = 145.75;
+	self->s.origin[2] = 97.5;
 	if (!coop->value)
 		return;
 	if(Q_stricmp(level.mapname, "security") == 0)
@@ -1573,9 +1577,29 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	edict_t	*other;
 	int		i, j;
 	pmove_t	pm;
-
+	char string[1024];
 	level.current_entity = ent;
 	client = ent->client;
+
+	ent->client->showhelp = true;
+	ent->client->pers.helpchanged = 0;
+	// send the layout
+	Com_sprintf(string, sizeof(string),
+		"xv 00 yv 24 cstring2 \"X: %.6f\" "
+		"xv 00 yv 48 cstring2 \"Y: %.6f\" "
+		"xv 00 yv 72 cstring2 \"Z: %.6f\" "
+
+		"xv 00 yv 90 cstring2 \"X: 6f\" "
+		"xv 00 yv 120 cstring2 \"Y: 16f\" "
+		"xv 00 yv 150 cstring2 \"Z: 36f\" "
+
+		"xv 00 yv 180 cstring2 \"X: 6f\" "
+		"xv 00 yv 210 cstring2 \"Y: 16f\" "
+		"xv 00 yv 240 cstring2 \"Z: 36f\" "
+		, ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]);
+	gi.WriteByte(svc_layout);
+	gi.WriteString(string);
+	gi.unicast(ent, true);
 
 	if (level.intermissiontime)
 	{
@@ -1674,13 +1698,6 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			VectorCopy (pm.viewangles, client->ps.viewangles);
 		}
 
-		client->v_angle[0] = 0;
-		client->v_angle[1] = 0;
-		client->v_angle[2] = 0;
-		client->ps.viewangles[0] = 0;
-		client->ps.viewangles[1] = 0;
-		client->ps.viewangles[2] = 0;
-		gi.dprintf("HELLO");
 		gi.linkentity (ent);
 
 		if (ent->movetype != MOVETYPE_NOCLIP)

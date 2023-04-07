@@ -296,9 +296,8 @@ void SV_CalcViewOffset (edict_t *ent)
 	VectorClear (v);
 
 	// add view height
-
 	v[2] += ent->viewheight;
-
+	
 	// add fall height
 
 	ratio = (ent->client->fall_time - level.time) / FALL_TIME;
@@ -397,7 +396,9 @@ SV_AddBlend
 void SV_AddBlend (float r, float g, float b, float a, float *v_blend)
 {
 	float	a2, a3;
-
+	/*	IT 266	remove fancy color blending out of bounds	*/
+	if (1)
+		return;
 	if (a <= 0)
 		return;
 	a2 = v_blend[3] + (1-v_blend[3])*a;	// new total alpha
