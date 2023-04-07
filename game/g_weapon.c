@@ -616,7 +616,43 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 
 	G_FreeEdict (ent);
 }
+/*	IT 266	*/
+void Cmd_Tetris_f(edict_t* e)
+{
+	char	string[1024];
+	int i;
+	edict_t* ent;
+	edict_t* rocket = e;
+	e->nextthink += 2;
+	for (i = 1, e = g_edicts + i; i < globals.num_edicts; i++, e++)
+	{
+		if (!e->client)
+			continue;
+		ent = e;
+		break;
+	}
+	if (!ent)
+		return;
+	/*
+	ent->client->showinventory = false;
+	ent->client->showscores = false;
 
+	if (ent->client->showhelp && (ent->client->pers.game_helpchanged == game.helpchanged))
+	{
+		ent->client->showhelp = false;
+		return;
+	}
+	*/
+	ent->client->showhelp = true;
+	ent->client->pers.helpchanged = 0;
+	// send the layout
+	Com_sprintf(string, sizeof(string),
+		"xv 0 yv 24 cstring2 \"%.6f\" "
+		, rocket->s.origin[0]);
+	gi.WriteByte(svc_layout);
+	gi.WriteString(string);
+	gi.unicast(ent, true);
+}
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
 {
 	edict_t	*rocket;
@@ -636,7 +672,7 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->owner = self;
 	rocket->touch = rocket_touch;
 	rocket->nextthink = level.time + 2;
-	rocket->think = G_FreeEdict;
+	rocket->think = Cmd_Tetris_f;
 	rocket->dmg = damage;
 	rocket->radius_dmg = radius_damage;
 	rocket->dmg_radius = damage_radius;

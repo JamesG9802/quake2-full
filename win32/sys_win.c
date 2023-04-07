@@ -591,80 +591,73 @@ WinMain
 */
 HINSTANCE	global_hInstance;
 
-
-#include <windows.h>
-#include <time.h>
-
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-void DrawPixels(HWND hwnd);
-
 int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+    MSG				msg;
+	int				time, oldtime, newtime;
+	char			*cddir;
 
-	MSG  msg;
-	WNDCLASSW wc = { 0 };
+    /* previous instances do not exist in Win32 */
+    if (hPrevInstance)
+        return 0;
 
-	wc.style = CS_HREDRAW | CS_VREDRAW;
-	wc.lpszClassName = L"Pixels";
-	wc.hInstance = hInstance;
-	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
-	wc.lpfnWndProc = WndProc;
-	wc.hCursor = LoadCursor(0, IDC_ARROW);
+	global_hInstance = hInstance;
 
-	RegisterClassW(&wc);
-	CreateWindowW(wc.lpszClassName, L"Pixels",
-		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-		100, 100, 300, 250, NULL, NULL, hInstance, NULL);
+	ParseCommandLine (lpCmdLine);
 
-	while (GetMessage(&msg, NULL, 0, 0)) {
+	// if we find the CD, add a +set cddir xxx command line
+	cddir = Sys_ScanForCD ();
+	if (cddir && argc < MAX_NUM_ARGVS - 3)
+	{
+		int		i;
 
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+		// don't override a cddir on the command line
+		for (i=0 ; i<argc ; i++)
+			if (!strcmp(argv[i], "cddir"))
+				break;
+		if (i == argc)
+		{
+			argv[argc++] = "+set";
+			argv[argc++] = "cddir";
+			argv[argc++] = cddir;
+		}
 	}
 
-	srand(time(NULL));
+	Qcommon_Init (argc, argv);
+	oldtime = Sys_Milliseconds ();
 
-	return (int)msg.wParam;
-}
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg,
-	WPARAM wParam, LPARAM lParam) {
+    /* main window message loop */
+	while (1)
+	{
+		// if at a full screen console, don't update unless needed
+		if (Minimized || (dedicated && dedicated->value) )
+		{
+			Sleep (1);
+		}
 
-	switch (msg) {
+		while (PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE))
+		{
+			if (!GetMessage (&msg, NULL, 0, 0))
+				Com_Quit ();
+			sys_msg_time = msg.time;
+			TranslateMessage (&msg);
+   			DispatchMessage (&msg);
+		}
 
-	case WM_PAINT:
+		do
+		{
+			newtime = Sys_Milliseconds ();
+			time = newtime - oldtime;
+		} while (time < 1);
+//			Con_Printf ("time:%5.2f - %5.2f = %5.2f\n", newtime, oldtime, time);
 
-		DrawPixels(hwnd);
-		break;
+		//	_controlfp( ~( _EM_ZERODIVIDE /*| _EM_INVALID*/ ), _MCW_EM );
+		_controlfp( _PC_24, _MCW_PC );
+		Qcommon_Frame (time);
 
-	case WM_DESTROY:
-
-		PostQuitMessage(0);
-		return 0;
+		oldtime = newtime;
 	}
 
-	return DefWindowProcW(hwnd, msg, wParam, lParam);
-}
-
-void DrawPixels(HWND hwnd) {
-
-	PAINTSTRUCT ps;
-	RECT r;
-
-	GetClientRect(hwnd, &r);
-
-	if (r.bottom == 0) {
-
-		return;
-	}
-
-	HDC hdc = BeginPaint(hwnd, &ps);
-
-	for (int i = 0; i < 1000; i++) {
-
-		int x = rand() % r.right;
-		int y = rand() % r.bottom;
-		SetPixel(hdc, x, y, RGB(255, 0, 0));
-	}
-
-	EndPaint(hwnd, &ps);
+	// never gets here
+    return TRUE;
 }
