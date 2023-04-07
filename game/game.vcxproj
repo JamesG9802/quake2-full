@@ -348,6 +348,7 @@ cd "C:\GOG Games\Quake 2"
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'"> /QA21164 /MTd   /QA21164 /MTd </AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release Alpha|Win32'"> /QA21164   /QA21164 </AdditionalOptions>
     </ClCompile>
+    <ClCompile Include="it266mod_draw.c" />
     <ClCompile Include="m_actor.c">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'"> /QA21164 /MTd   /QA21164 /MTd </AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release Alpha|Win32'"> /QA21164   /QA21164 </AdditionalOptions>
@@ -472,6 +473,7 @@ cd "C:\GOG Games\Quake 2"
   <ItemGroup>
     <ClInclude Include="g_local.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="it266mod_draw.h" />
     <ClInclude Include="m_actor.h" />
     <ClInclude Include="m_berserk.h" />
     <ClInclude Include="m_boss2.h" />

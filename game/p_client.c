@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "g_local.h"
 #include "m_player.h"
-
 void ClientUserinfoChanged (edict_t *ent, char *userinfo);
 
 void SP_misc_teleporter_dest (edict_t *ent);
@@ -1573,7 +1572,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 	edict_t	*other;
 	int		i, j;
 	pmove_t	pm;
-
+	
 	level.current_entity = ent;
 	client = ent->client;
 
@@ -1673,14 +1672,6 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			VectorCopy (pm.viewangles, client->v_angle);
 			VectorCopy (pm.viewangles, client->ps.viewangles);
 		}
-
-		client->v_angle[0] = 0;
-		client->v_angle[1] = 0;
-		client->v_angle[2] = 0;
-		client->ps.viewangles[0] = 0;
-		client->ps.viewangles[1] = 0;
-		client->ps.viewangles[2] = 0;
-		gi.dprintf("HELLO");
 		gi.linkentity (ent);
 
 		if (ent->movetype != MOVETYPE_NOCLIP)
