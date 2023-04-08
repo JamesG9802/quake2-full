@@ -1399,6 +1399,10 @@ void Qcommon_Init (int argc, char **argv)
 {
 	char	*s;
 
+	/*	
+		IT 266	We implement our own custom window logic so we can destroy
+		pre-existing commands that conflict with our own.
+	*/
 	if (setjmp (abortframe) )
 		Sys_Error ("Error during initialization");
 
@@ -1414,7 +1418,8 @@ void Qcommon_Init (int argc, char **argv)
 	Cmd_Init ();
 	Cvar_Init ();
 
-	Key_Init ();
+	/*	IT 266 we don't want Quake to steal key commands away from us	*/
+	//	Key_Init ();
 
 	// we need to add the early commands twice, because
 	// a basedir or cddir needs to be set before execing
@@ -1459,11 +1464,16 @@ void Qcommon_Init (int argc, char **argv)
 
 	Sys_Init ();
 
+	/*	
+		IT 266	No need to let Quake handle client or server	
+		
 	NET_Init ();
 	Netchan_Init ();
 
 	SV_Init ();
 	CL_Init ();
+
+	*/
 
 	// add + commands from command line
 	if (!Cbuf_AddLateCommands ())

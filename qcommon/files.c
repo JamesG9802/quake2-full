@@ -870,7 +870,12 @@ void FS_InitFilesystem (void)
 	// check for game override
 	fs_gamedirvar = Cvar_Get ("game", "", CVAR_LATCH|CVAR_SERVERINFO);
 	if (fs_gamedirvar->string[0])
-		FS_SetGamedir (fs_gamedirvar->string);
+	{
+		printf("Setting game to %s", fs_gamedirvar->string);
+		FS_SetGamedir(fs_gamedirvar->string);
+	}
+	else
+		printf("Didn't set game to ");
 }
 
 

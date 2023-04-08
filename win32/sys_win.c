@@ -591,73 +591,167 @@ WinMain
 */
 HINSTANCE	global_hInstance;
 
-int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+/*	IT 266	adapted from https://zetcode.com/gui/winapi/gdi/	*/
+#include <windows.h>
+#include <time.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "ModTime.h"
+#include "ModDefs.h"
+#include "ModSysVars.h"
+
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+void Render(HWND hwnd);
+
+/*	IT 266	Goodbye Quake :(	*/
+
+HWND windowHandle;	//	Handle to window instance
+int exitFlag = 0;
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    MSG				msg;
-	int				time, oldtime, newtime;
-	char			*cddir;
+	MSG				msg;
 
-    /* previous instances do not exist in Win32 */
-    if (hPrevInstance)
-        return 0;
+	WNDCLASSW wc = { 0 };
 
+	double timeDiff = 0;	//	time for update loop
+	double timeCounter = 0;
+	FILE* fp;	//	debug mode
+
+	//	Original source code
 	global_hInstance = hInstance;
+	ParseCommandLine(lpCmdLine);
+	/*	Create a window for debugging	*/
+	AllocConsole();
+	freopen_s(&fp, "CONIN$", "r", stdin);
+	freopen_s(&fp, "CONOUT$", "w", stdout);
+	freopen_s(&fp, "CONOUT$", "w", stderr);
 
-	ParseCommandLine (lpCmdLine);
+	/*	Set up window	*/
+	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.lpszClassName = L"Pixels";
+	wc.hInstance = hInstance;
+	wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
+	wc.lpfnWndProc = WndProc;
+	wc.hCursor = LoadCursor(0, IDC_ARROW);
+	RegisterClassW(&wc);
+	windowHandle = CreateWindowW(wc.lpszClassName, L"Pixels",
+		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+		100, 100, 300, 250, NULL, NULL, hInstance, NULL);
 
-	// if we find the CD, add a +set cddir xxx command line
-	cddir = Sys_ScanForCD ();
-	if (cddir && argc < MAX_NUM_ARGVS - 3)
+	printf("%d %s %s", argc, argv[0], argv[1]);
+	/*	Original Source Code to setup basic initialization	*/
+	Qcommon_Init(argc, argv);
+
+	/* main window message loop */
+	while (exitFlag == 0)
 	{
-		int		i;
-
-		// don't override a cddir on the command line
-		for (i=0 ; i<argc ; i++)
-			if (!strcmp(argv[i], "cddir"))
-				break;
-		if (i == argc)
+		/*	Input Handling	*/
+		POINT point;
+		if (GetCursorPos(&point))
 		{
-			argv[argc++] = "+set";
-			argv[argc++] = "cddir";
-			argv[argc++] = cddir;
+			ScreenToClient(windowHandle, &point);
+			SetMouseX(point.x);
+			SetMouseY(point.y);
+		}
+		/*	Handle messages	*/
+		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 		}
 	}
-
-	Qcommon_Init (argc, argv);
-	oldtime = Sys_Milliseconds ();
-
-    /* main window message loop */
-	while (1)
-	{
-		// if at a full screen console, don't update unless needed
-		if (Minimized || (dedicated && dedicated->value) )
-		{
-			Sleep (1);
-		}
-
-		while (PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE))
-		{
-			if (!GetMessage (&msg, NULL, 0, 0))
-				Com_Quit ();
-			sys_msg_time = msg.time;
-			TranslateMessage (&msg);
-   			DispatchMessage (&msg);
-		}
-
-		do
-		{
-			newtime = Sys_Milliseconds ();
-			time = newtime - oldtime;
-		} while (time < 1);
-//			Con_Printf ("time:%5.2f - %5.2f = %5.2f\n", newtime, oldtime, time);
-
-		//	_controlfp( ~( _EM_ZERODIVIDE /*| _EM_INVALID*/ ), _MCW_EM );
-		_controlfp( _PC_24, _MCW_PC );
-		Qcommon_Frame (time);
-
-		oldtime = newtime;
-	}
-
 	// never gets here
-    return TRUE;
+	return TRUE;
+}
+LRESULT CALLBACK WndProc(HWND hwnd, UINT msg,
+	WPARAM wParam, LPARAM lParam) {
+	RECT r;
+	double timeDiff;
+	FILE* file = NULL;
+	switch (msg) {
+		/*	https://stackoverflow.com/a/47150133	*/
+	case WM_CREATE:
+
+		SetTimer(hwnd, 1, 16, NULL);
+		break;
+
+	case WM_TIMER:
+
+		/*	Update Game logic	*/
+
+		GetClientRect(hwnd, &r);
+		InvalidateRect(hwnd, &r, TRUE);
+		break;
+
+
+	case WM_CHAR:
+		if (wParam == 'q')
+		{
+			FS_FOpenFile("crazy.txt", &file);
+			if (file != NULL)
+			{
+				fseek(file, 0l, SEEK_END);
+				printf("%lu", ftell(file));
+			}
+			else
+				printf("didnt find it ");
+		}
+		else
+			printf("%c", wParam);
+		return 0;
+
+	case VK_UP:
+		return 0;
+	case VK_LEFT:
+		return 1;
+
+	case WM_PAINT:
+
+		Render(hwnd);
+		break;
+
+	case WM_DESTROY:
+
+		exitFlag = 1;
+		PostQuitMessage(0);
+		return 0;
+
+	case WM_CLOSE:
+
+		if (MessageBox(hwnd, L"Really quit?", L"My application", MB_OKCANCEL) == IDOK)
+		{
+			DestroyWindow(hwnd);
+		}
+		return 0;
+	}
+	return DefWindowProcW(hwnd, msg, wParam, lParam);
+}
+
+void Render(HWND hwnd) {
+
+	PAINTSTRUCT ps;
+	RECT r;
+
+	GetClientRect(hwnd, &r);
+
+	if (r.bottom == 0) {
+
+		return;
+	}
+
+	HDC hdc = BeginPaint(hwnd, &ps);
+
+	/*
+	for (int i = 0; i < 1000; i++) {
+
+		int x = rand() % r.right;
+		int y = rand() % r.bottom;
+		SetPixel(hdc, x, y, RGB(255, 0, 0));
+	}
+	*/
+
+	Rectangle(hdc, GetMouseX() - 5, GetMouseY() - 5, GetMouseX() + 5, GetMouseY() + 5/*, RGB(255, 0, 0) */);
+	EndPaint(hwnd, &ps);
 }

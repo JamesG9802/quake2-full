@@ -470,6 +470,11 @@
     <ClInclude Include="client\snd_loc.h" />
     <ClInclude Include="client\sound.h" />
     <ClInclude Include="client\vid.h" />
+    <ClInclude Include="win32\ModDefs.h" />
+    <ClInclude Include="win32\ModInput.h" />
+    <ClInclude Include="win32\ModRender.h" />
+    <ClInclude Include="win32\ModSysVars.h" />
+    <ClInclude Include="win32\ModTime.h" />
     <ClInclude Include="win32\winquake.h" />
   </ItemGroup>
   <ItemGroup>
