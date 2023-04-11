@@ -713,7 +713,8 @@ void	FS_FreeFile (void *buffer);
 
 void	FS_CreatePath (char *path);
 
-
+/*	IT 266	Adding list files	*/
+char**	FS_ListFiles(char* findname, int* numfiles, unsigned musthave, unsigned canthave);
 /*
 ==============================================================
 
