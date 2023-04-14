@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #include "client.h"
-
+#include "../win32/ModInput.h"
 /*
 
 key up events are sent even if in console mode
@@ -566,6 +566,7 @@ Key_Bind_f
 */
 void Key_Bind_f (void)
 {
+	/*	IT 266	lmao Quake has no control over the inputs, only we do >:)
 	int			i, c, b;
 	char		cmd[1024];
 	
@@ -602,6 +603,8 @@ void Key_Bind_f (void)
 	}
 
 	Key_SetBinding (b, cmd);
+	*/
+	ModInput_Rebind(Cmd_Argv(1), Cmd_Argv(2));
 }
 
 /*
@@ -644,6 +647,11 @@ Key_Init
 */
 void Key_Init (void)
 {
+	/*	IT 266 We handle input ourself so we remove all commands to 
+		prevent Quake from doing some weird memory leaks	
+	*/
+	
+	/*
 	int		i;
 
 	for (i=0 ; i<32 ; i++)
@@ -723,10 +731,16 @@ void Key_Init (void)
 //
 // register our functions
 //
+	*/
+
+	/*	IT 266	we leave this command so in the config file we can set keybindings	*/
 	Cmd_AddCommand ("bind",Key_Bind_f);
+
+	/*
 	Cmd_AddCommand ("unbind",Key_Unbind_f);
 	Cmd_AddCommand ("unbindall",Key_Unbindall_f);
 	Cmd_AddCommand ("bindlist",Key_Bindlist_f);
+	*/
 }
 
 /*

@@ -1418,8 +1418,8 @@ void Qcommon_Init (int argc, char **argv)
 	Cmd_Init ();
 	Cvar_Init ();
 
-	/*	IT 266 we don't want Quake to steal key commands away from us	*/
-	//	Key_Init ();
+	/*	IT 266 modified to redirect bindings to us	*/
+	Key_Init ();
 
 	// we need to add the early commands twice, because
 	// a basedir or cddir needs to be set before execing
@@ -1462,11 +1462,12 @@ void Qcommon_Init (int argc, char **argv)
 	if (dedicated->value)
 		Cmd_AddCommand ("quit", Com_Quit);
 
-	Sys_Init ();
 
 	/*	
 		IT 266	No need to let Quake handle client or server	
 		
+	Sys_Init ();
+
 	NET_Init ();
 	Netchan_Init ();
 

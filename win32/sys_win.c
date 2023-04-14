@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 // sys_win.h
-
 #include "../qcommon/qcommon.h"
 #include "winquake.h"
 #include "resource.h"
@@ -590,16 +589,22 @@ HINSTANCE	global_hInstance;
 	IT 266 - DO NOT TOUCH ANYTHING ABOVE THIS LINE	
 */
 
-#include <windows.h>
-
+/*	C Stuff	*/
 #include <time.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 
+/*	SFML stuff	*/
+#include <SFML/Window.h>
+#include <SFML/Graphics.h>
+
+/*	My stuff	*/
 #include "ModTime.h"
 #include "ModDefs.h"
 #include "ModSysVars.h"
+
+#include "ModGame.h"
+#include "ModInput.h"
 #include "ModRender.h"
 
 /// <summary>
@@ -607,7 +612,7 @@ HINSTANCE	global_hInstance;
 /// </summary>
 void QuakeInit(int argc, char** argv)
 {
-	/*	Actually, now that we don't use win32 anymore we can just take in the arguments
+	/*	Actually, now that we don't use win32 anymore we can just take in the arguments >:)
 		ParseCommandLine(commandString);
 	*/
 	Qcommon_Init(argc, argv);
@@ -616,10 +621,14 @@ void QuakeInit(int argc, char** argv)
 int main(int argc, char** argv)
 {
 	QuakeInit(argc, argv);
-	ModRenderInit();
-	while (1)
-	{
 
+	ModGameInit();
+	ModRenderInit();
+
+	while (sfRenderWindow_isOpen(window))
+	{
+		ModInput_Update();
+		ModRenderUpdate();
 		printf("uh oh");
 		Sleep(100);
 	}
