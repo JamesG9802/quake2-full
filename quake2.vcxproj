@@ -268,6 +268,8 @@ cd "C:\GOG Games\Quake 2"
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="win32\ModObject.c" />
+    <ClCompile Include="win32\ModSprite.c" />
     <ClCompile Include="win32\cd_win.c">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'"> /QA21164 /MTd /QAieee1   /QA21164 /MTd /QAieee1 </AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release Alpha|Win32'"> /QA21164 /QAieee1   /QA21164 /QAieee1 </AdditionalOptions>
@@ -467,6 +469,8 @@ cd "C:\GOG Games\Quake 2"
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="client\anorms.h" />
+    <ClInclude Include="win32\ModObject.h" />
+    <ClInclude Include="win32\ModSprite.h" />
     <ClInclude Include="qcommon\bspfile.h" />
     <ClInclude Include="client\cdaudio.h" />
     <ClInclude Include="client\client.h" />

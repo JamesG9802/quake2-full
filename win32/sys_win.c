@@ -596,6 +596,7 @@ HINSTANCE	global_hInstance;
 
 /*	SFML stuff	*/
 #include <SFML/Window.h>
+#include <SFML/Window/Event.h>
 #include <SFML/Graphics.h>
 
 /*	My stuff	*/
@@ -620,6 +621,8 @@ void QuakeInit(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
+	sfEvent event;
+
 	QuakeInit(argc, argv);
 
 	ModGameInit();
@@ -627,10 +630,16 @@ int main(int argc, char** argv)
 
 	while (sfRenderWindow_isOpen(window))
 	{
+		while (sfRenderWindow_pollEvent(window, &event))
+		{
+			// "close requested" event: we close the window
+			if (event.type == sfEvtClosed)
+				sfRenderWindow_close(window);
+		}
 		ModInput_Update();
+		ModGameUpdate();
 		ModRenderUpdate();
-		printf("uh oh");
-		Sleep(100);
 	}
+	ModGameCleanup();
 	return 0;
 }

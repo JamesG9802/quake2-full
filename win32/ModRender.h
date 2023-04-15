@@ -1,7 +1,7 @@
 #pragma once
 
-sfTexture* texture;
-sfSprite* sprite;
+#include "ModSprite.h"
+
 /// <summary>
 /// Initializes the window of the application.
 /// </summary>
