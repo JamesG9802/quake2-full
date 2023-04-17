@@ -1,3 +1,11 @@
 #pragma once
 #define FRAMES_PER_SECOND (double)45
 #define TIME_PER_FRAME	(1 / FRAMES_PER_SECOND)
+
+#define MOD_BACKGROUND_XOFFSET -200
+#define MOD_GRID_XPOS 50
+#define MOD_GRID_YPOS 80
+#define MOD_GRID_WIDTH 80
+#define MOD_GRID_HEIGHT 97
+#define MOD_GRID_ROWS 5
+#define MOD_GRID_COLS 9

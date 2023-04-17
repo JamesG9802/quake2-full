@@ -1,7 +1,9 @@
 #pragma once
 
 #include "ModObject.h"
-ModObject* object;
+#include "ModList.h"
+
+ModList* gameObjects;
 
 /// <summary>
 /// Initializes game by binding common actions

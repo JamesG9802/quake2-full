@@ -11,3 +11,5 @@ void ModRenderInit();
 /// Renders all relevant sprites to the window
 /// </summary>
 void ModRenderUpdate();
+
+void ModRenderResize(sfEvent event);

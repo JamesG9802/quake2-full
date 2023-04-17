@@ -1,4 +1,3 @@
-#pragma once
 
 /*	Quake Stuff	*/
 #include "../qcommon/qcommon.h"
@@ -37,13 +36,18 @@ void ModObject_Destroy(ModObject* object)
 }
 void ModObject_Think(ModObject* object)
 {
-	if (object && object->Think) object->Think();
+	if (object && object->Think) object->Think(object);
 }
 void ModObject_Draw(ModObject* object, sfRenderWindow* window)
 {
 	if (object && object->modsprite) 
 	{
-		sfSprite_setPosition(object->modsprite->sprite, object->position);
 		sfRenderWindow_drawSprite(window, object->modsprite->sprite, NULL);
 	}
+}
+void ModObject_SetPosition(ModObject* object, sfVector2f position)
+{
+	object->position = position;
+	if (object && object->modsprite)
+		sfSprite_setPosition(object->modsprite->sprite, object->position);
 }

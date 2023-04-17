@@ -607,7 +607,7 @@ HINSTANCE	global_hInstance;
 #include "ModGame.h"
 #include "ModInput.h"
 #include "ModRender.h"
-
+#include "ModList.h"
 /// <summary>
 /// Handle some initialization that Quake used to do... and stop it from doing other stuff.
 /// </summary>
@@ -627,7 +627,7 @@ int main(int argc, char** argv)
 
 	ModGameInit();
 	ModRenderInit();
-
+	
 	while (sfRenderWindow_isOpen(window))
 	{
 		while (sfRenderWindow_pollEvent(window, &event))
@@ -635,6 +635,8 @@ int main(int argc, char** argv)
 			// "close requested" event: we close the window
 			if (event.type == sfEvtClosed)
 				sfRenderWindow_close(window);
+			if (event.type == sfEvtResized)
+				ModRenderResize(event);
 		}
 		ModInput_Update();
 		ModGameUpdate();
