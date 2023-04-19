@@ -30,3 +30,4 @@ void ModObject_Destroy(ModObject* object);
 void ModObject_Think(ModObject* object);
 void ModObject_Draw(ModObject* object, sfRenderWindow* window);
 void ModObject_SetPosition(ModObject* object, sfVector2f position);
+void ModObject_Resize(ModObject* object, sfVector2f size);

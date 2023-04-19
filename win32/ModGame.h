@@ -4,6 +4,7 @@
 #include "ModList.h"
 
 ModList* gameObjects;
+ModList* uiObjects;
 
 /// <summary>
 /// Initializes game by binding common actions

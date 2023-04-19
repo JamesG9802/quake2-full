@@ -13,7 +13,7 @@
 #include "ModGame.h"
 #include "ModObject.h"
 #include "ModList.h"
-
+#include "ModPriorityQueue.h"
 void ModRenderInit()
 {
 	sfVideoMode vidMode;
@@ -22,12 +22,19 @@ void ModRenderInit()
 	window = sfRenderWindow_create(vidMode, "Totally Quake :)", sfDefaultStyle, NULL);
 	sfRenderWindow_setVerticalSyncEnabled(window, true);
 }
+/// <summary>
+/// Draw Game Objects first and then UI over it
+/// </summary>
 void ModRenderUpdate()
 {
 	sfRenderWindow_clear(window, sfBlack);
 	for (int i = 0; i < gameObjects->length; i++)
 	{
 		ModObject_Draw(((ModObject*)(gameObjects->elements[i])), window);
+	}
+	for (int i = 0; i < uiObjects->length; i++)
+	{
+		ModObject_Draw((ModObject*)(ModPriorityQueue_At(uiObjects, i)), window);
 	}
 	sfRenderWindow_display(window);
 }

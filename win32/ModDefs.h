@@ -9,3 +9,10 @@
 #define MOD_GRID_HEIGHT 97
 #define MOD_GRID_ROWS 5
 #define MOD_GRID_COLS 9
+
+#define MOD_PLANT_PNG_WIDTH	256
+#define	MOD_PLANT_PNG_HEIGHT	256
+
+#define MOD_BACKGROUND_PNG	"pics/lawn.png"
+#define	MOD_SUNFLOWER_PNG	"pics/plant0.png"
+#define	MOD_PEASHOOTER_PNG	"pics/plant1.png"

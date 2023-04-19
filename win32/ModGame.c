@@ -4,13 +4,17 @@
 #include <SFML/Window.h>
 #include <SFML/System/Vector2.h>
 
-#include "ModDefs.h"
-#include "ModGame.h"
-#include "ModSysVars.h"
-#include "ModObject.h"
 #include "ModList.h"
-#include "ModGameObjects.h"
+#include "ModPriorityQueue.h"
 
+#include "ModDefs.h"
+#include "ModSysVars.h"
+
+#include "ModGame.h"
+#include "ModObject.h"
+#include "ModObjectUI.h"
+
+#include "ModGameObjects.h"
 
 extern void (*Primary_Action)(void);
 extern void (*Secondary_Action)(void);
@@ -31,10 +35,15 @@ void ModGameInit()
 	Primary_Action = Game_Primary;
 	Secondary_Action = Game_Secondary;
 
-	/*	Draw Background	*/
 	gameObjects = ModList_Create();
+	uiObjects = ModPriorityQueue_Create();
+	
+	ModObject* ui = CreateModUI(MOD_PEASHOOTER_PNG);
+	ModPriorityQueue_Insert(uiObjects, ui, 10);
 
-	ModObject* background = ModObject_Create("pics/lawn.png");
+	/*	Draw Background	*/
+	
+	ModObject* background = ModObject_Create(MOD_BACKGROUND_PNG);
 	sfVector2f position;
 	position.x = MOD_BACKGROUND_XOFFSET;
 	position.y = 0;
@@ -55,11 +64,38 @@ void ModGameInit()
 			ModList_Append(gameObjects, gridsquare);
 		}
 	}
+	background = ModObject_Create(MOD_SUNFLOWER_PNG);
+	position.x = MOD_GRID_XPOS + MOD_GRID_WIDTH * 5;
+	position.y = MOD_GRID_YPOS + MOD_GRID_HEIGHT * 2;
+	ModObject_SetPosition(background, position);
+	position.x = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
+	position.y = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
+	ModObject_Resize(background, position);
+	ModList_Append(gameObjects, background);
+
+	background = ModObject_Create(MOD_PEASHOOTER_PNG);
+	position.x = MOD_GRID_XPOS + MOD_GRID_WIDTH * 2;
+	position.y = MOD_GRID_YPOS + MOD_GRID_HEIGHT * 2;
+	ModObject_SetPosition(background, position);
+	position.x = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
+	position.y = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
+	ModObject_Resize(background, position);
+	ModList_Append(gameObjects, background);
+
+	
 }
+/// <summary>
+/// UI thinks first, then game objects
+/// </summary>
 void ModGameUpdate()
 {
-	sfVector2i mousepos = sfMouse_getPositionRenderWindow(window);
-	//printf("%d %d", mousepos.x, mousepos.y);
+	for (int i = 0; i < uiObjects->length; i++)
+	{
+		if (((ModObject*)(ModPriorityQueue_At(uiObjects, i)))->Think != NULL)
+		{
+			((ModObject*)(ModPriorityQueue_At(uiObjects, i)))->Think((ModObject*)ModPriorityQueue_At(uiObjects, i));
+		}
+	}
 	for (int i = 0; i < gameObjects->length; i++)
 	{
 		if (((ModObject*)gameObjects->elements[i])->Think != NULL)
@@ -78,5 +114,14 @@ void ModGameCleanup()
 				ModObject_Destroy(gameObjects->elements[i]);
 		}
 		ModList_Destroy(gameObjects);
+	}
+	if (uiObjects)
+	{
+		for (int i = 0; i < uiObjects->length; i++)
+		{
+			if (ModPriorityQueue_At(uiObjects, i))
+				ModObject_Destroy(ModPriorityQueue_At(uiObjects, i));
+		}
+		ModPriorityQueue_Destroy(uiObjects);
 	}
 }

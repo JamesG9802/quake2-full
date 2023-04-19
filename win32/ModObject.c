@@ -47,7 +47,13 @@ void ModObject_Draw(ModObject* object, sfRenderWindow* window)
 }
 void ModObject_SetPosition(ModObject* object, sfVector2f position)
 {
-	object->position = position;
+	if(object)
+		object->position = position;
 	if (object && object->modsprite)
 		sfSprite_setPosition(object->modsprite->sprite, object->position);
+}
+void ModObject_Resize(ModObject* object, sfVector2f size)
+{
+	if (object && object->modsprite)
+		sfSprite_setScale(object->modsprite->sprite, size);
 }
