@@ -27,7 +27,6 @@ void ModRenderInit()
 /// </summary>
 void ModRenderUpdate()
 {
-	sfRenderWindow_clear(window, sfBlack);
 	for (int i = 0; i < gameObjects->length; i++)
 	{
 		ModObject_Draw(((ModObject*)(gameObjects->elements[i])), window);
@@ -37,6 +36,7 @@ void ModRenderUpdate()
 		ModObject_Draw((ModObject*)(ModPriorityQueue_At(uiObjects, i)), window);
 	}
 	sfRenderWindow_display(window);
+	sfRenderWindow_clear(window, sfBlack);
 }
 
 void ModRenderResize(sfEvent event)

@@ -16,6 +16,9 @@ ModObject* ModObject_CreateNoSprite()
 	if (!obj) return obj;
 	obj->modsprite = NULL;
 	obj->Think = NULL;
+	obj->Draw = NULL;
+	obj->Destroy = NULL;
+	obj->shouldDraw = 0;
 	obj->position.x = 0;
 	obj->position.y = 0;
 	return obj;
@@ -24,12 +27,15 @@ ModObject* ModObject_Create(const char* sprite)
 {
 	ModObject* obj = ModObject_CreateNoSprite();
 	obj->modsprite = ModSprite_Create(sprite);
+	obj->shouldDraw = 1;
 	return obj;
 }
 void ModObject_Destroy(ModObject* object)
 {
 	if (object == NULL)
 		return;
+	if (object->Destroy)
+		object->Destroy(object);
 	if (object->modsprite)
 		ModSprite_Destroy(object->modsprite);
 	free(object);
@@ -40,10 +46,14 @@ void ModObject_Think(ModObject* object)
 }
 void ModObject_Draw(ModObject* object, sfRenderWindow* window)
 {
-	if (object && object->modsprite) 
+	if (!object || object && !object->shouldDraw)
+		return;
+	if (!object->Draw && object->modsprite)	//	using default draw
 	{
 		sfRenderWindow_drawSprite(window, object->modsprite->sprite, NULL);
 	}
+	else if(object->Draw)	// custom draw
+		object->Draw(object);
 }
 void ModObject_SetPosition(ModObject* object, sfVector2f position)
 {

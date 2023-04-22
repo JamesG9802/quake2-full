@@ -15,9 +15,10 @@ typedef struct ModObject {
 	ModSprite* modsprite;
 	sfVector2f position;
 	void (*Think)(struct ModObject*);
-
-	//	Unusued variable for other classes
-	sfVector2f vectorData;
+	void (*Draw)(struct ModObject*);
+	void (*Destroy)(struct ModObject*);		//	Specific OnDestroy Function for objects
+	unsigned char shouldDraw;
+	void* data;								//	Unused data for objects
 } ModObject;
 
 /// <summary>

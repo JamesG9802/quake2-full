@@ -19,30 +19,28 @@
 extern void (*Primary_Action)(void);
 extern void (*Secondary_Action)(void);
 
+extern GameData gameData;
 extern ModList* gameObjects = NULL;
-void Game_Primary()
-{
-	printf("primary action\n");
-}
-void Game_Secondary()
-{
-	printf("Secondary action\n");
-}
+extern ModList* uiObjects = NULL;
+extern float timeDelta = 0;
+
+
+sfClock* clock = NULL;
 
 void ModGameInit()
 {
-	/*	Initialize Input Actions	*/
-	Primary_Action = Game_Primary;
-	Secondary_Action = Game_Secondary;
-
+	/*	Initialize Global Variables	*/
+	gameData.sunAmt = MOD_GAME_SUNAMT;
 	gameObjects = ModList_Create();
 	uiObjects = ModPriorityQueue_Create();
-	
-	ModObject* ui = CreateModUI(MOD_PEASHOOTER_PNG);
-	ModPriorityQueue_Insert(uiObjects, ui, 10);
+	clock = sfClock_create();
 
-	/*	Draw Background	*/
-	
+	/*	Add Game Manager	*/
+	ModObject* manager = ModObject_CreateNoSprite();
+	manager->Think = GameThink;
+	ModList_Append(gameObjects, manager);
+
+	/*	Add Background	*/
 	ModObject* background = ModObject_Create(MOD_BACKGROUND_PNG);
 	sfVector2f position;
 	position.x = MOD_BACKGROUND_XOFFSET;
@@ -55,33 +53,22 @@ void ModGameInit()
 	{
 		for (int x = 0; x < MOD_GRID_COLS; x++)
 		{
-			ModObject* gridsquare = ModObject_CreateNoSprite();
+			ModObject* gridsquare = ModObject_Create(MOD_GRIDGLOW_PNG);
 			sfVector2f position;
 			position.x = MOD_GRID_XPOS + MOD_GRID_WIDTH * x;
 			position.y = MOD_GRID_YPOS + MOD_GRID_HEIGHT * y;
 			ModObject_SetPosition(gridsquare, position);
+			position.x = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
+			position.y = (float)MOD_GRID_HEIGHT / MOD_PLANT_PNG_HEIGHT;
+			ModObject_Resize(gridsquare, position);
 			gridsquare->Think = GridThink;
+			gridsquare->shouldDraw = 0;
 			ModList_Append(gameObjects, gridsquare);
 		}
 	}
-	background = ModObject_Create(MOD_SUNFLOWER_PNG);
-	position.x = MOD_GRID_XPOS + MOD_GRID_WIDTH * 5;
-	position.y = MOD_GRID_YPOS + MOD_GRID_HEIGHT * 2;
-	ModObject_SetPosition(background, position);
-	position.x = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
-	position.y = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
-	ModObject_Resize(background, position);
-	ModList_Append(gameObjects, background);
-
-	background = ModObject_Create(MOD_PEASHOOTER_PNG);
-	position.x = MOD_GRID_XPOS + MOD_GRID_WIDTH * 2;
-	position.y = MOD_GRID_YPOS + MOD_GRID_HEIGHT * 2;
-	ModObject_SetPosition(background, position);
-	position.x = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
-	position.y = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
-	ModObject_Resize(background, position);
-	ModList_Append(gameObjects, background);
-
+	/*	Add UI elements	*/
+	ModObject* ui = UI_CreateSunCounter();
+	ModPriorityQueue_Insert(uiObjects, ui, 10);
 	
 }
 /// <summary>
@@ -89,6 +76,8 @@ void ModGameInit()
 /// </summary>
 void ModGameUpdate()
 {
+	timeDelta = sfTime_asMilliseconds(sfClock_restart(clock)) / 1000.0;
+
 	for (int i = 0; i < uiObjects->length; i++)
 	{
 		if (((ModObject*)(ModPriorityQueue_At(uiObjects, i)))->Think != NULL)
@@ -124,4 +113,6 @@ void ModGameCleanup()
 		}
 		ModPriorityQueue_Destroy(uiObjects);
 	}
+	if(clock)
+		sfClock_destroy(clock);
 }

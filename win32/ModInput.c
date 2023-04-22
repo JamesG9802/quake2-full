@@ -33,8 +33,30 @@ int isPressed(sfInput input)
 }
 void ModInput_Update()
 {
-	if (isPressed(primary))		(*Primary_Action)();
-	if (isPressed(secondary))	(*Secondary_Action)();
+	if (isPressed(primary))	{
+		gameData.primaryDown = 1;
+		gameData.primaryReleased = 0;
+	}
+	else if (gameData.primaryDown == 1)	{
+		gameData.primaryDown = 0;
+		gameData.primaryReleased = 1;
+	}
+	else	{
+		gameData.primaryDown = 0;
+		gameData.primaryReleased = 0;
+	}
+	if (isPressed(secondary)) {
+		gameData.secondaryDown = 1;
+		gameData.secondaryReleased = 0;
+	}
+	else if (gameData.secondaryDown == 1) {
+		gameData.secondaryDown = 0;
+		gameData.secondaryReleased = 1;
+	}
+	else{
+		gameData.secondaryDown = 0;
+		gameData.secondaryReleased = 0;
+	}
 }
 void ModInput_Rebind(const char* key, const char* command)
 {
