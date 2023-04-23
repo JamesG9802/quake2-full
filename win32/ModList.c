@@ -56,6 +56,28 @@ void* ModList_Remove(ModList* list, int index)
 	list->length--;
 	return item;
 }
+void* ModList_RemoveC(ModList* list, void* item)
+{
+	int i;
+	void* listItem = NULL;
+	if (item == NULL)
+		return NULL;
+	for (i = 0; i < list->length; i++)
+	{
+		if (item == list->elements[i])
+		{
+			listItem = item;
+			break;
+		}
+	}
+	if (listItem == NULL)
+		return NULL;
+	for (; i < list->length; i++)
+		list->elements[i] = list->elements[i + 1];
+	list->length--;
+	return item;
+}
+
 void* ModList_Pop(ModList* list)
 {
 	return ModList_Remove(list, list->length - 1);

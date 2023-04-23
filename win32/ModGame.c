@@ -22,15 +22,17 @@ extern void (*Secondary_Action)(void);
 extern GameData gameData;
 extern ModList* gameObjects = NULL;
 extern ModList* uiObjects = NULL;
-extern float timeDelta = 0;
-
 
 sfClock* clock = NULL;
 
 void ModGameInit()
 {
 	/*	Initialize Global Variables	*/
-	gameData.sunAmt = MOD_GAME_SUNAMT;
+	gameData.sunAmt = MOD_GAME_INITSUN;
+	for (int y = 0; y < MOD_GRID_ROWS; y++)
+		for (int x = 0; x < MOD_GRID_COLS; x++)
+			gameData.plantGrid[y][x] = NULL;
+
 	gameObjects = ModList_Create();
 	uiObjects = ModPriorityQueue_Create();
 	clock = sfClock_create();
@@ -76,8 +78,8 @@ void ModGameInit()
 /// </summary>
 void ModGameUpdate()
 {
-	timeDelta = sfTime_asMilliseconds(sfClock_restart(clock)) / 1000.0;
-
+	gameData.timeDelta = sfTime_asMilliseconds(sfClock_restart(clock)) / 1000.0;
+	gameData.mousepos = sfMouse_getPositionRenderWindow(window);
 	for (int i = 0; i < uiObjects->length; i++)
 	{
 		if (((ModObject*)(ModPriorityQueue_At(uiObjects, i)))->Think != NULL)
@@ -87,14 +89,26 @@ void ModGameUpdate()
 	}
 	for (int i = 0; i < gameObjects->length; i++)
 	{
+		int currentLength = gameObjects->length;
 		if (((ModObject*)gameObjects->elements[i])->Think != NULL)
 		{
 			((ModObject*)gameObjects->elements[i])->Think(((ModObject*)gameObjects->elements[i]));
 		}
+		if (currentLength != gameObjects->length)	//	hack solution to if a gameObject destroys itself
+			i--;
 	}
 }
 void ModGameCleanup()
 {
+	//	Game Data
+	/*	Don't actually need to free the grid because all grid objects are in gameobjects
+	for (int y = 0; y < MOD_GRID_ROWS; y++)
+		for (int x = 0; x < MOD_GRID_COLS; x++)
+		{
+			if(gameData.plantGrid[y][x])
+				ModObject_Destroy(gameData.plantGrid[y][x]);
+		}
+	*/
 	if (gameObjects)
 	{
 		for (int i = 0; i < gameObjects->length; i++)

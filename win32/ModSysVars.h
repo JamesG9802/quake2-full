@@ -14,3 +14,8 @@ int exitFlag;
 /// Singleton instance of the main window of the application.
 /// </summary>
 struct sfRenderWindow* window;
+
+/// <summary>
+/// Seed for random number generator
+/// </summary>
+unsigned int randomSeed;

@@ -33,6 +33,14 @@ void ModList_Insert(ModList* list, void* item, int index);
 void* ModList_Remove(ModList* list, int index);
 
 /// <summary>
+/// (RemoveC - RemoveCopy) Removes an item if in the list. Does not do anything if item is NULL. Returns NULL if no matches are found.
+/// </summary>
+/// <param name="list"></param>
+/// <param name="item"></param>
+/// <returns></returns>
+void* ModList_RemoveC(ModList* list, void* item);
+
+/// <summary>
 /// Removes the last item in the list.
 /// </summary>
 /// <param name="list"></param>

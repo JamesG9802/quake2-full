@@ -624,7 +624,7 @@ int main(int argc, char** argv)
 	sfEvent event;
 
 	QuakeInit(argc, argv);
-
+	srand(time(NULL));
 	ModGameInit();
 	ModRenderInit();
 	

@@ -48,11 +48,8 @@ void ModObject_Draw(ModObject* object, sfRenderWindow* window)
 {
 	if (!object || object && !object->shouldDraw)
 		return;
-	if (!object->Draw && object->modsprite)	//	using default draw
-	{
-		sfRenderWindow_drawSprite(window, object->modsprite->sprite, NULL);
-	}
-	else if(object->Draw)	// custom draw
+	sfRenderWindow_drawSprite(window, object->modsprite->sprite, NULL);
+	if(object->Draw)	// custom draw
 		object->Draw(object);
 }
 void ModObject_SetPosition(ModObject* object, sfVector2f position)
