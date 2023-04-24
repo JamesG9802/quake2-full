@@ -75,8 +75,8 @@ ModObject* UI_CreateSunCounter()
 	/*	Init Image	*/
 	ModObject* ui = ModObject_Create(MOD_SUN_PNG);
 	sfVector2f scale;
-	scale.x = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
-	scale.y = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
+	scale.x = (float)MOD_GRID_WIDTH / MOD_SUNUI_PNG_WIDTH;
+	scale.y = (float)MOD_GRID_WIDTH / MOD_SUNUI_PNG_HEIGHT;
 	ModObject_Resize(ui, scale);
 
 	/*	Set Up Specific Functions	*/

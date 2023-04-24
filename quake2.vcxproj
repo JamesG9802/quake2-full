@@ -387,6 +387,7 @@ cd "C:\GOG Games\Quake 2"
     <ClCompile Include="win32\ModInput.c" />
     <ClCompile Include="win32\ModRender.c" />
     <ClCompile Include="win32\ModSysVars.c" />
+    <ClCompile Include="win32\ModZombie.c" />
     <ClCompile Include="win32\net_wins.c">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug Alpha|Win32'"> /QA21164 /MTd /QAieee1   /QA21164 /MTd /QAieee1 </AdditionalOptions>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release Alpha|Win32'"> /QA21164 /QAieee1   /QA21164 /QAieee1 </AdditionalOptions>
@@ -505,6 +506,7 @@ cd "C:\GOG Games\Quake 2"
     <ClInclude Include="win32\ModRender.h" />
     <ClInclude Include="win32\ModSysVars.h" />
     <ClInclude Include="win32\ModTime.h" />
+    <ClInclude Include="win32\ModZombie.h" />
     <ClInclude Include="win32\winquake.h" />
   </ItemGroup>
   <ItemGroup>

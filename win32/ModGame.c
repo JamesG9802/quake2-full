@@ -60,8 +60,8 @@ void ModGameInit()
 			position.x = MOD_GRID_XPOS + MOD_GRID_WIDTH * x;
 			position.y = MOD_GRID_YPOS + MOD_GRID_HEIGHT * y;
 			ModObject_SetPosition(gridsquare, position);
-			position.x = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
-			position.y = (float)MOD_GRID_HEIGHT / MOD_PLANT_PNG_HEIGHT;
+			position.x = (float)MOD_GRID_WIDTH / MOD_GRIDGLOW_PNG_HEIGHT;
+			position.y = (float)MOD_GRID_HEIGHT / MOD_GRIDGLOW_PNG_WIDTH;
 			ModObject_Resize(gridsquare, position);
 			gridsquare->Think = GridThink;
 			gridsquare->shouldDraw = 0;
@@ -95,7 +95,7 @@ void ModGameUpdate()
 			((ModObject*)gameObjects->elements[i])->Think(((ModObject*)gameObjects->elements[i]));
 		}
 		if (currentLength != gameObjects->length)	//	hack solution to if a gameObject destroys itself
-			i--;
+			i = i;
 	}
 }
 void ModGameCleanup()

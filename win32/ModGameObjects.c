@@ -10,8 +10,22 @@
 #include "ModSysVars.h"
 #include "ModObject.h"
 #include "ModPlant.h"
+#include "ModZombie.h"
 
-ModObject* PlacePlant(ModObject* object, int x, int y)
+void PlaceZombie(ModObject* object, int x, int y)
+{
+	sfVector2f position;
+	position.x = MOD_GRID_XPOS + MOD_GRID_WIDTH * x;
+	position.y = MOD_GRID_YPOS + MOD_GRID_HEIGHT * y + (MOD_GRID_HEIGHT - MOD_GRID_YPOS) / 2;
+	ModObject_SetPosition(object, position);
+	sfVector2f scale;
+//	scale.x = (float)MOD_GRID_WIDTH / MOD_ZOMBIE_PNG_WIDTH;
+//	scale.y = (float)MOD_GRID_WIDTH / MOD_ZOMBIE_PNG_HEIGHT;
+//	ModObject_Resize(object, scale);
+	ModList_Append(gameObjects, object);
+}
+
+void PlacePlant(ModObject* object, int x, int y)
 {
 	//	If grid square is already occupied, do nothing
 	if (gameData.plantGrid[y][x])
@@ -40,7 +54,6 @@ void SunThink(ModObject* object) {
 	gameData.sunAmt += MOD_GAME_SUNVALUE;
 	ModList_RemoveC(gameObjects, object);
 	ModObject_Destroy(object);
-	printf("sun");
 	return;
 }
 ModObject* CreateSun()
@@ -83,6 +96,16 @@ void GridThink(ModObject* object) {
 		printf("%d %d\n", x, y);
 		ModObject* plant = CreatePlant(MOD_SUNFLOWER);
 		PlacePlant(plant, x, y);
+	}
+	if (gameData.secondaryReleased)
+	{
+		int x = (mousepos.x - MOD_GRID_XPOS) / MOD_GRID_WIDTH;
+		int y = (mousepos.y - MOD_GRID_YPOS) / MOD_GRID_HEIGHT;
+		printf("Zombie %d %d\n", x, y);
+		ModObject* zombie = CreateZombie(MOD_ZOMBIE_REGULAR);
+		if (zombie == NULL)
+			printf("NULL");
+		PlaceZombie(zombie, x, y);
 	}
 }
 void GameThink(ModObject* object) {
