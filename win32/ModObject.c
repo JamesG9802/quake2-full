@@ -15,6 +15,7 @@ ModObject* ModObject_CreateNoSprite()
 	ModObject* obj = malloc(sizeof(ModObject));
 	if (!obj) return obj;
 	obj->modsprite = NULL;
+	obj->className = NULL;
 	obj->Think = NULL;
 	obj->Draw = NULL;
 	obj->Destroy = NULL;
@@ -34,6 +35,8 @@ void ModObject_Destroy(ModObject* object)
 {
 	if (object == NULL)
 		return;
+	if (object->className)
+		free(object->className);
 	if (object->Destroy)
 		object->Destroy(object);
 	if (object->modsprite)

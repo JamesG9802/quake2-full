@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "SFML/Graphics.h"
 #include "SFML/Graphics/RectangleShape.h"
@@ -67,16 +69,74 @@ ModObject* CreateSun()
 	object->Think = SunThink;
 	return object;
 }
-void GridThink(ModObject* object) {
-	sfRectangleShape* rect = sfRectangleShape_create();
 
+void ProjectileThink(ModObject* object) {
+	if (object && object->data && ((ModList*)(object->data))->elements[0])
+	{
+		double speed = *(double*)(((ModList*)(object->data))->elements[1]);
+		sfVector2f newPosition;
+		newPosition.x = object->position.x + speed * gameData.timeDelta * MOD_GRID_WIDTH;
+		newPosition.y = object->position.y;
+		ModObject_SetPosition(object, newPosition);
+		//	Unoptimized collision detection
+		for (int i = 0; i < gameObjects->length; i++)
+		{
+			//	Is a zombie
+			if (((ModObject*)(gameObjects->elements[i]))->className &&
+				strcmp(((ModObject*)(gameObjects->elements[i]))->className, MOD_CLASS_ZOMBIE) == 0)
+			{
+				ModObject* zombie = (ModObject*)(gameObjects->elements[i]);
+				//	is in bounds
+				if (object->position.x >= zombie->position.x && 
+					object->position.x <= zombie->position.x + MOD_ZOMBIE_PNG_WIDTH &&
+					object->position.y >= zombie->position.y &&
+					object->position.y <= zombie->position.y + MOD_ZOMBIE_PNG_HEIGHT)
+				{
+					double damage = *((double*)(((ModList*)(object->data))->elements[0]));
+					DamageZombie(zombie, damage);
+					ModObject_Destroy(object);
+					return;
+				}
+			}
+		}
+	}
+}
+void ProjectileDestroy(ModObject* object) {
+	for (int i = 0; i < ((ModList*)object->data)->length; i++)
+	{
+		free(((ModList*)object->data)->elements[i]);
+	}
+	ModList_Destroy(object->data);
+}
+ModObject* CreateProjectile(double damage, double speed, const char* imagePath)
+{
+	
+	ModObject* object = ModObject_Create(imagePath);
+	
+	sfVector2f scale;
+	scale.x = (float)MOD_PROJECTILE_PNG_WIDTH / MOD_PROJECTILE0_PNG_WIDTH;
+	scale.y = (float)MOD_PROJECTILE_PNG_HEIGHT/ MOD_PROJECTILE0_PNG_WIDTH;
+	ModObject_Resize(object, scale);
+	
+	object->data = ModList_Create();
+
+	double* damageParameter = malloc(sizeof(double));
+	double* speedParameter = malloc(sizeof(double));
+
+	*damageParameter = damage;
+	*speedParameter = speed;
+
+	ModList_Append(object->data, damageParameter);
+	ModList_Append(object->data, speedParameter);
+
+	object->Think = ProjectileThink;
+	object->Destroy = ProjectileDestroy;
+	
+	return object;
+}
+void GridThink(ModObject* object) {
 	if (!object) return;
 
-	/*	Doesn't work because render immediately clears
-	sfRectangleShape_setFillColor(rect, sfRed);
-	sfRectangleShape_setPosition(rect, object->position);
-	sfRenderWindow_drawRectangleShape(window, rect, NULL);
-	*/
 	sfVector2i mousepos = gameData.mousepos;
 
 	/*	Outside the bounds	*/
@@ -94,7 +154,7 @@ void GridThink(ModObject* object) {
 		if (gameData.plantGrid[y][x])
 			return;
 		printf("%d %d\n", x, y);
-		ModObject* plant = CreatePlant(MOD_SUNFLOWER);
+		ModObject* plant = CreatePlant(MOD_PEASHOOTER);
 		PlacePlant(plant, x, y);
 	}
 	if (gameData.secondaryReleased)
@@ -109,10 +169,4 @@ void GridThink(ModObject* object) {
 	}
 }
 void GameThink(ModObject* object) {
-	static float time = 0;
-	time += gameData.timeDelta;
-	if (time >= 1)
-	{
-		time--;
-	}
 }

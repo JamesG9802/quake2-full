@@ -14,6 +14,7 @@ struct ModObject;
 typedef struct ModObject {
 	ModSprite* modsprite;
 	sfVector2f position;
+	const char* className;
 	void (*Think)(struct ModObject*);
 	void (*Draw)(struct ModObject*);
 	void (*Destroy)(struct ModObject*);		//	Specific OnDestroy Function for objects

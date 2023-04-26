@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "ModDefs.h"
 #include "ModList.h"
@@ -7,9 +8,15 @@
 #include "ModObject.h"
 #include "ModZombie.h"
 
-
+ModObject* DamageZombie(ModObject* zombie, double damage) {
+	if (zombie && ((ModList*)zombie->data)->elements[0])
+	{
+		double* health = ((double*)((ModList*)zombie->data)->elements[0]);
+		*health -= damage;
+	}
+}
 ModObject* DamagePlant(ModObject* zombie, ModObject* plant) {
-	if (zombie && plant && 
+	if (zombie && plant &&
 		zombie->data && plant->data &&
 		((ModList*)zombie->data)->elements[1] && ((ModList*)plant->data)->elements[0])
 	{
@@ -17,12 +24,21 @@ ModObject* DamagePlant(ModObject* zombie, ModObject* plant) {
 		double health = *((double*)((ModList*)plant->data)->elements[0]);
 		health -= damage * gameData.timeDelta;
 		*((double*)((ModList*)plant->data)->elements[0]) = health;
-		printf("%.6f\n", health);
 	}
 }
 
 void ZombieThink(ModObject* object) {
 	sfVector2f pos;
+
+	if (object->data && ((ModList*)(object->data))->elements[0]) {
+		double health = *((double*)((ModList*)object->data)->elements[0]);
+		if (health <= 0)
+		{
+			ModList_RemoveC(gameObjects, object);
+			ModObject_Destroy(object);
+			return;
+		}
+	}
 
 	int x = (object->position.x - MOD_GRID_XPOS) / MOD_GRID_WIDTH;
 	int y = (object->position.y - MOD_GRID_YPOS) / MOD_GRID_HEIGHT;
@@ -55,6 +71,8 @@ ModObject* CreateZombie(int zombie) {
 	switch (zombie) {
 	case MOD_ZOMBIE_REGULAR:
 		object = ModObject_Create(MOD_ZOMBIE_REGULAR_PNG);
+		object->className = malloc(sizeof(char)*(strlen(MOD_CLASS_ZOMBIE)+1));
+		strcpy(object->className, MOD_CLASS_ZOMBIE);
 		object->data = ModList_Create();
 		health = malloc(sizeof(double));
 		damage = malloc(sizeof(double));
