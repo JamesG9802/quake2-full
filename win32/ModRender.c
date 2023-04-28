@@ -17,9 +17,9 @@
 void ModRenderInit()
 {
 	sfVideoMode vidMode;
-	vidMode.width = 800;
-	vidMode.height = 600;
-	window = sfRenderWindow_create(vidMode, "Totally Quake :)", sfDefaultStyle, NULL);
+	vidMode.width = MOD_WINDOW_WIDTH;
+	vidMode.height = MOD_WINDOW_HEIGHT;
+	window = sfRenderWindow_create(vidMode, "Totally Quake :)", sfClose | sfTitlebar, NULL);
 	sfRenderWindow_setVerticalSyncEnabled(window, true);
 }
 /// <summary>
@@ -47,7 +47,7 @@ void ModRenderResize(sfEvent event)
 	rect.left = 0;
 	rect.width = event.size.width;
 	rect.height = event.size.height;
-	view = sfView_createFromRect(rect);
-	sfRenderWindow_setView(window, view);
-	sfView_destroy(view);
+//	view = sfView_createFromRect(rect);
+//	sfRenderWindow_setView(window, view);
+//	sfView_destroy(view);
 }

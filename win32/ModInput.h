@@ -23,7 +23,8 @@ int isPressed(sfInput input);
 
 sfInput primary;
 sfInput secondary;
-
+sfInput left;
+sfInput right;
 
 
 /// <summary>

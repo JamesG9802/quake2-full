@@ -33,6 +33,7 @@ int isPressed(sfInput input)
 }
 void ModInput_Update()
 {
+	//	PRIMARY
 	if (isPressed(primary))	{
 		gameData.primaryDown = 1;
 		gameData.primaryReleased = 0;
@@ -45,6 +46,7 @@ void ModInput_Update()
 		gameData.primaryDown = 0;
 		gameData.primaryReleased = 0;
 	}
+	//	SECONDARY
 	if (isPressed(secondary)) {
 		gameData.secondaryDown = 1;
 		gameData.secondaryReleased = 0;
@@ -57,6 +59,32 @@ void ModInput_Update()
 		gameData.secondaryDown = 0;
 		gameData.secondaryReleased = 0;
 	}
+	//	LEFT
+	if (isPressed(left)) {
+		gameData.leftDown = 1;
+		gameData.leftReleased = 0;
+	}
+	else if (gameData.leftDown == 1) {
+		gameData.leftDown = 0;
+		gameData.leftReleased = 1;
+	}
+	else {
+		gameData.leftDown = 0;
+		gameData.leftReleased = 0;
+	}
+	//	RIGHT
+	if (isPressed(right)) {
+		gameData.rightDown = 1;
+		gameData.rightReleased = 0;
+	}
+	else if (gameData.rightDown == 1) {
+		gameData.rightDown = 0;
+		gameData.rightReleased = 1;
+	}
+	else {
+		gameData.rightDown = 0;
+		gameData.rightReleased = 0;
+	}
 }
 void ModInput_Rebind(const char* key, const char* command)
 {
@@ -66,6 +94,10 @@ void ModInput_Rebind(const char* key, const char* command)
 		primary = ModInput_ConvertToInput(key);
 	else if (strcmp(command, "secondary") == 0)
 		secondary = ModInput_ConvertToInput(key);
+	else if (strcmp(command, "left") == 0)
+		left = ModInput_ConvertToInput(key);
+	else if (strcmp(command, "right") == 0)
+		right = ModInput_ConvertToInput(key);
 }
 
 sfKeyCode stringToKeyCode(const char* string, int length)

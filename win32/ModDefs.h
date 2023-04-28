@@ -1,6 +1,9 @@
 #pragma once
 
 /*	Hard coded Pixel Coordinates	*/
+#define MOD_WINDOW_WIDTH	800
+#define MOD_WINDOW_HEIGHT	600
+
 #define MOD_BACKGROUND_XOFFSET -200
 #define MOD_GRID_XPOS 50
 #define MOD_GRID_YPOS 80
@@ -40,15 +43,31 @@
 
 #define MOD_SUNFLOWER	0
 #define MOD_PEASHOOTER	1
+#define MOD_WALLNUT	2
+#define MOD_CHERRYBOMB	3
+#define MOD_JALEPENO	4
+#define MOD_GARLIC	5
+#define MOD_REPEATER	6
+#define MOD_TORCHWOOD	7
+#define MOD_MOUSESHOOTER	8
+#define MOD_SQUASH	9
+
+#define MOD_LOWEST_PLANT_INDEX	MOD_SUNFLOWER
+#define	MOD_HIGHEST_PLANT_INDEX	MOD_SQUASH
 
 #define MOD_PLANT_HEALTH_NORMAL	300
+#define MOD_PLANT_HEALTH_HIGH	100
 
-#define MOD_PLANT_DAMAGE_NORMAL 150
+#define MOD_PLANT_DAMAGE_NORMAL 20
 
 #define MOD_SUNFLOWER_COOLDOWN	5	//	24 seconds in reality
 #define MOD_PEASHOOTER_COOLDOWN	1.5
 
 #define MOD_ZOMBIE_REGULAR	0
+#define MOD_ZOMBIE_CONE	1
+#define MOD_ZOMBIE_BUCKET	2
+#define MOD_ZOMBIE_FLAG	3
+#define MOD_ZOMBIE_FOOTBALL	4
 
 #define MOD_ZOMBIE_HEALTH_LOW	180
 
@@ -68,9 +87,22 @@
 
 #define	MOD_SUNFLOWER_PNG	"pics/plant0.png"
 #define	MOD_PEASHOOTER_PNG	"pics/plant1.png"
+#define MOD_WALLNUT_PNG	"pics/plant2.png"
+#define MOD_CHERRYBOMB_PNG	"pics/plant3.png"
+#define MOD_JALEPENO_PNG	"pics/plant4.png"
+#define MOD_GARLIC_PNG	"pics/plant5.png"
+#define MOD_REPEATER_PNG	"pics/plant6.png"
+#define MOD_TORCHWOOD_PNG	"pics/plant7.png"
+#define MOD_MOUSESHOOTER_PNG	"pics/plant8.png"
+#define MOD_SQUASH_PNG	"pics/plant9.png"
+
 #define MOD_SUN_PNG			"pics/sun.png"
 
 #define MOD_ZOMBIE_REGULAR_PNG	"pics/zombie0.png"
+#define MOD_ZOMBIE_CONE_PNG	"pics/zombie1.png"
+#define MOD_ZOMBIE_BUCKET_PNG	"pics/zombie2.png"
+#define MOD_ZOMBIE_FLAG_PNG	"pics/zombie3.png"
+#define MOD_ZOMBIE_FOOTBALL_PNG	"pics/zombie4.png"
 
 #define MOD_PEA_PNG	"pics/proj0.png"
 /*	Fonts	*/

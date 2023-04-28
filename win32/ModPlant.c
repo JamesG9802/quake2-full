@@ -106,6 +106,20 @@ ModObject* CreatePlant(int plant) {
 		object->Think = PeashooterThink;
 		object->Destroy = PlantDestroy;
 		break;
+	case MOD_WALLNUT:
+		object = ModObject_Create(MOD_WALLNUT_PNG);
+		object->data = ModList_Create();
+
+		health = malloc(sizeof(double));
+		time = malloc(sizeof(double));
+
+		*health = MOD_PLANT_HEALTH_HIGH;
+
+		ModList_Append(object->data, health);
+
+		object->Think = PlantThink;
+		object->Destroy = PlantDestroy;
+		break;
 	default:
 		return NULL;
 	}

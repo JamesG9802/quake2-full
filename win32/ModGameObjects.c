@@ -94,10 +94,18 @@ void ProjectileThink(ModObject* object) {
 				{
 					double damage = *((double*)(((ModList*)(object->data))->elements[0]));
 					DamageZombie(zombie, damage);
+
+					ModList_RemoveC(gameObjects, object);
 					ModObject_Destroy(object);
 					return;
 				}
 			}
+		}
+		//	Out of window
+		if (newPosition.x > MOD_WINDOW_WIDTH)
+		{
+			ModList_RemoveC(gameObjects, object);
+			ModObject_Destroy(object);
 		}
 	}
 }
@@ -154,7 +162,7 @@ void GridThink(ModObject* object) {
 		if (gameData.plantGrid[y][x])
 			return;
 		printf("%d %d\n", x, y);
-		ModObject* plant = CreatePlant(MOD_PEASHOOTER);
+		ModObject* plant = CreatePlant(gameData.currentPlant);
 		PlacePlant(plant, x, y);
 	}
 	if (gameData.secondaryReleased)

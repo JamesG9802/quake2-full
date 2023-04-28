@@ -10,6 +10,7 @@
 #include <SFML/Graphics/Font.h>
 #include <SFML/System/Types.h>
 #include <SFML/System/Vector2.h>
+#include <SFML/Graphics/Sprite.h>
 
 #include "ModDefs.h"
 #include "ModGame.h"
@@ -89,5 +90,69 @@ ModObject* UI_CreateSunCounter()
 	ModList_Append(ui->data, NULL);		//	sfFont*
 	ModList_Append(ui->data, NULL);		//	sfText*
 	ModList_Append(ui->data, NULL);		//	unsigned char*
+	return ui;
+}
+void PlantBuy_Think(ModObject* object) {
+	if (gameData.leftReleased == gameData.rightReleased)	//	dont do anything
+		return;
+	if (gameData.leftReleased)
+		gameData.currentPlant--;
+	else
+		gameData.currentPlant++;
+	//	Wrap around
+	if (gameData.currentPlant < MOD_LOWEST_PLANT_INDEX)
+		gameData.currentPlant = MOD_HIGHEST_PLANT_INDEX;
+	else if (gameData.currentPlant > MOD_HIGHEST_PLANT_INDEX)
+		gameData.currentPlant = MOD_LOWEST_PLANT_INDEX;
+	ModSprite* sprite = NULL;
+	sfVector2f scale = sfSprite_getScale(object->modsprite->sprite);
+	sfVector2f pos = object->position;
+	switch (gameData.currentPlant)
+	{
+	default:
+	case MOD_SUNFLOWER:
+		sprite = ModSprite_Create(MOD_SUNFLOWER_PNG);
+		break;
+	case MOD_PEASHOOTER:
+		sprite = ModSprite_Create(MOD_PEASHOOTER_PNG);
+		break;
+	case MOD_WALLNUT:
+		sprite = ModSprite_Create(MOD_WALLNUT_PNG);
+		break;
+	case MOD_CHERRYBOMB:
+		sprite = ModSprite_Create(MOD_CHERRYBOMB_PNG);
+		break;
+	case MOD_JALEPENO:
+		sprite = ModSprite_Create(MOD_JALEPENO_PNG);
+		break;
+	case MOD_GARLIC:
+		sprite = ModSprite_Create(MOD_GARLIC_PNG);
+		break;
+	case MOD_REPEATER:
+		sprite = ModSprite_Create(MOD_REPEATER_PNG);
+		break;
+	case MOD_TORCHWOOD:
+		sprite = ModSprite_Create(MOD_TORCHWOOD_PNG);
+		break;
+	case MOD_MOUSESHOOTER:
+		sprite = ModSprite_Create(MOD_MOUSESHOOTER_PNG);
+		break;
+	case MOD_SQUASH:
+		sprite = ModSprite_Create(MOD_SQUASH_PNG);
+		break;
+	}
+	ModSprite_Destroy(object->modsprite);
+	object->modsprite = sprite;
+	ModObject_Resize(object, scale);
+	ModObject_SetPosition(object, pos);
+}
+ModObject* UI_CreatePlantBuy() {
+	ModObject* ui = ModObject_Create(MOD_SUNFLOWER_PNG);
+	sfVector2f scale;
+	scale.x = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_WIDTH;
+	scale.y = (float)MOD_GRID_WIDTH / MOD_PLANT_PNG_HEIGHT;
+	ModObject_Resize(ui, scale);
+
+	ui->Think = PlantBuy_Think;
 	return ui;
 }

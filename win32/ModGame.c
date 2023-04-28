@@ -29,6 +29,7 @@ void ModGameInit()
 {
 	/*	Initialize Global Variables	*/
 	gameData.sunAmt = MOD_GAME_INITSUN;
+	gameData.currentPlant = MOD_SUNFLOWER;
 	for (int y = 0; y < MOD_GRID_ROWS; y++)
 		for (int x = 0; x < MOD_GRID_COLS; x++)
 			gameData.plantGrid[y][x] = NULL;
@@ -71,7 +72,11 @@ void ModGameInit()
 	/*	Add UI elements	*/
 	ModObject* ui = UI_CreateSunCounter();
 	ModPriorityQueue_Insert(uiObjects, ui, 10);
-	
+	ModObject* plantshop = UI_CreatePlantBuy();
+	position.x = MOD_SUNUI_PNG_WIDTH + 10;
+	position.y = 0;
+	ModObject_SetPosition(plantshop, position);
+	ModPriorityQueue_Insert(uiObjects, plantshop, 11);
 }
 /// <summary>
 /// UI thinks first, then game objects
