@@ -94,7 +94,35 @@ ModObject* UI_CreateSunCounter()
 }
 void PlantBuy_Think(ModObject* object) {
 	if (gameData.leftReleased == gameData.rightReleased)	//	dont do anything
+	{
+		int cost = 0;
+		switch (gameData.currentPlant)
+		{
+		default:
+		case MOD_SUNFLOWER:	cost = MOD_SUNFLOWER_COST; break;
+		case MOD_PEASHOOTER:	cost = MOD_PEASHOOTER_COST; break;
+		case MOD_WALLNUT:	cost = MOD_WALLNUT_COST; break;
+		case MOD_CHERRYBOMB:	cost = MOD_CHERRYBOMB_COST; break;
+		case MOD_JALEPENO:	cost = MOD_JALEPENO_COST; break;
+		case MOD_EXPLODENUT:	cost = MOD_EXPLODENUT_COST; break;
+		case MOD_REPEATER:	cost = MOD_REPEATER_COST; break;
+		case MOD_TORCHWOOD:	cost = MOD_TORCHWOOD_COST; break;
+		case MOD_MOUSESHOOTER:	cost = MOD_MOUSESHOOTER_COST; break;
+		case MOD_CHOMPER:	cost = MOD_CHOMPER_COST; break;
+		}
+		if (cost > gameData.sunAmt)
+		{
+			sfColor color = sfColor_fromRGB(55 + (unsigned char)(200 * (gameData.sunAmt / (float)cost)),
+				55 + (unsigned char)(200 * (gameData.sunAmt / (float)cost)),
+				55 + (unsigned char)(200 * (gameData.sunAmt / (float)cost)));
+			sfSprite_setColor(object->modsprite->sprite, color);
+		}
+		else
+		{
+			sfSprite_setColor(object->modsprite->sprite, sfWhite);
+		}
 		return;
+	}
 	if (gameData.leftReleased)
 		gameData.currentPlant--;
 	else
@@ -125,8 +153,8 @@ void PlantBuy_Think(ModObject* object) {
 	case MOD_JALEPENO:
 		sprite = ModSprite_Create(MOD_JALEPENO_PNG);
 		break;
-	case MOD_GARLIC:
-		sprite = ModSprite_Create(MOD_GARLIC_PNG);
+	case MOD_EXPLODENUT:
+		sprite = ModSprite_Create(MOD_EXPLODENUT_PNG);
 		break;
 	case MOD_REPEATER:
 		sprite = ModSprite_Create(MOD_REPEATER_PNG);
@@ -137,14 +165,37 @@ void PlantBuy_Think(ModObject* object) {
 	case MOD_MOUSESHOOTER:
 		sprite = ModSprite_Create(MOD_MOUSESHOOTER_PNG);
 		break;
-	case MOD_SQUASH:
-		sprite = ModSprite_Create(MOD_SQUASH_PNG);
+	case MOD_CHOMPER:
+		sprite = ModSprite_Create(MOD_CHOMPER_PNG);
 		break;
 	}
 	ModSprite_Destroy(object->modsprite);
 	object->modsprite = sprite;
 	ModObject_Resize(object, scale);
 	ModObject_SetPosition(object, pos);
+
+	int cost = 0;
+	switch (gameData.currentPlant)
+	{
+	default:
+	case MOD_SUNFLOWER:	cost = MOD_SUNFLOWER_COST; break;
+	case MOD_PEASHOOTER:	cost = MOD_PEASHOOTER_COST; break;
+	case MOD_WALLNUT:	cost = MOD_WALLNUT_COST; break;
+	case MOD_CHERRYBOMB:	cost = MOD_CHERRYBOMB_COST; break;
+	case MOD_JALEPENO:	cost = MOD_JALEPENO_COST; break;
+	case MOD_EXPLODENUT:	cost = MOD_EXPLODENUT_COST; break;
+	case MOD_REPEATER:	cost = MOD_REPEATER_COST; break;
+	case MOD_TORCHWOOD:	cost = MOD_TORCHWOOD_COST; break;
+	case MOD_MOUSESHOOTER:	cost = MOD_MOUSESHOOTER_COST; break;
+	case MOD_CHOMPER:	cost = MOD_CHOMPER_COST; break;
+	}
+	if (cost > gameData.sunAmt)
+	{
+		sfColor color = sfColor_fromRGB(55 +(unsigned char)(200 * (gameData.sunAmt / (float)cost)),
+			55 + (unsigned char)(200 * (gameData.sunAmt / (float)cost)),
+			55 +(unsigned char)(200 * (gameData.sunAmt / (float)cost)));
+		sfSprite_setColor(object->modsprite->sprite, color);
+	}
 }
 ModObject* UI_CreatePlantBuy() {
 	ModObject* ui = ModObject_Create(MOD_SUNFLOWER_PNG);

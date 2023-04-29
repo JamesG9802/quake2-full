@@ -1,5 +1,3 @@
-c:\users\james\documents\github\quake2-full\release\cmodel.obj
-c:\users\james\documents\github\quake2-full\release\cmd.obj
 c:\users\james\documents\github\quake2-full\release\cl_view.obj
 c:\users\james\documents\github\quake2-full\release\cl_tent.obj
 c:\users\james\documents\github\quake2-full\release\cl_scrn.obj
@@ -15,13 +13,13 @@ c:\users\james\documents\github\quake2-full\release\cl_cin.obj
 c:\users\james\documents\github\quake2-full\release\cd_win.obj
 c:\users\james\documents\github\quake2-full\release\modsprite.obj
 c:\users\james\documents\github\quake2-full\release\modpriorityqueue.obj
+c:\users\james\documents\github\quake2-full\release\modplant.obj
 c:\users\james\documents\github\quake2-full\release\modobjectui.obj
 c:\users\james\documents\github\quake2-full\release\modobject.obj
 c:\users\james\documents\github\quake2-full\release\modlist.obj
-c:\users\james\documents\github\quake2-full\release\q_shwin.obj
-c:\users\james\documents\github\quake2-full\release\q_shared.obj
-c:\users\james\documents\github\quake2-full\release\pmove.obj
+c:\users\james\documents\github\quake2-full\release\modgameobjects.obj
 c:\users\james\documents\github\quake2-full\release\net_wins.obj
+c:\users\james\documents\github\quake2-full\release\modzombie.obj
 c:\users\james\documents\github\quake2-full\release\modsysvars.obj
 c:\users\james\documents\github\quake2-full\release\modrender.obj
 c:\users\james\documents\github\quake2-full\release\modinput.obj
@@ -38,6 +36,8 @@ c:\users\james\documents\github\quake2-full\release\crc.obj
 c:\users\james\documents\github\quake2-full\release\console.obj
 c:\users\james\documents\github\quake2-full\release\conproc.obj
 c:\users\james\documents\github\quake2-full\release\common.obj
+c:\users\james\documents\github\quake2-full\release\cmodel.obj
+c:\users\james\documents\github\quake2-full\release\cmd.obj
 c:\users\james\documents\github\quake2-full\release\x86.obj
 c:\users\james\documents\github\quake2-full\release\vid_menu.obj
 c:\users\james\documents\github\quake2-full\release\vid_dll.obj
@@ -55,9 +55,9 @@ c:\users\james\documents\github\quake2-full\release\snd_mix.obj
 c:\users\james\documents\github\quake2-full\release\snd_mem.obj
 c:\users\james\documents\github\quake2-full\release\snd_dma.obj
 c:\users\james\documents\github\quake2-full\release\qmenu.obj
-c:\users\james\documents\github\quake2-full\release\modplant.obj
-c:\users\james\documents\github\quake2-full\release\modgameobjects.obj
-c:\users\james\documents\github\quake2-full\release\modzombie.obj
+c:\users\james\documents\github\quake2-full\release\q_shwin.obj
+c:\users\james\documents\github\quake2-full\release\q_shared.obj
+c:\users\james\documents\github\quake2-full\release\pmove.obj
 c:\users\james\documents\github\quake2-full\release\quake2.exe
 c:\users\james\documents\github\quake2-full\release\quake2.pdb
 c:\users\james\documents\github\quake2-full\release\q2.res
