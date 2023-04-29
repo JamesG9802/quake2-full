@@ -8,6 +8,8 @@ typedef struct GameData {
 	long sunAmt;						//	how much sun the player has
 	int currentPlant;					//	the current plant the player can buy
 	float timeDelta;					//	time since last frame
+	unsigned char gamePaused;			//	is the game paused
+	unsigned char gameLost;				//	did the player lose
 	sfVector2i mousepos;				//	current frame's mouse position
 	unsigned char primaryDown;			//	is primary action activated
 	unsigned char primaryReleased;		//	is primary action released
@@ -17,6 +19,8 @@ typedef struct GameData {
 	unsigned char leftReleased;			//	is left action released
 	unsigned char rightDown;			//	is right action activated
 	unsigned char rightReleased;		//	is right action released
+	unsigned char menuDown;				//	is menu action activated
+	unsigned char menuReleased;			//	is menu action released
 	ModObject* plantGrid[MOD_GRID_ROWS][MOD_GRID_COLS];	//	grid of plants
 } GameData;
 

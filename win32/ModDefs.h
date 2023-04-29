@@ -37,6 +37,8 @@
 #define MOD_PROJECTILE1_PNG_WIDTH 28
 #define MOD_PROJECTILE1_PNG_HEIGHT 28
 
+#define MOD_LOSE_PNG_WIDTH	2048
+#define MOD_LOSE_PNG_HEIGHT	1292
 /*	Game Information	*/
 #define MOD_GRID_ROWS 5
 #define MOD_GRID_COLS 9
@@ -63,7 +65,7 @@
 #define MOD_WALLNUT_COST	50
 #define MOD_CHERRYBOMB_COST	150
 #define MOD_JALEPENO_COST	125
-#define MOD_EXPLODENUT_COST	75
+#define MOD_EXPLODENUT_COST	100
 #define MOD_REPEATER_COST	200
 #define MOD_TORCHWOOD_COST	175
 #define MOD_MOUSESHOOTER_COST	75
@@ -131,6 +133,9 @@
 
 #define MOD_PEA_PNG	"pics/proj0.png"
 #define MOD_FIREPEA_PNG	"pics/proj1.png"
+
+#define MOD_LOSE_PNG "pics/lose.png"
+
 /*	Fonts	*/
 #define MOD_TEXT_TTF		"fonts/cour.ttf"
 #define MOD_TEXTBOLD_TTF	"fonts/courbd.ttf"

@@ -51,7 +51,8 @@ void ModObject_Draw(ModObject* object, sfRenderWindow* window)
 {
 	if (!object || object && !object->shouldDraw)
 		return;
-	sfRenderWindow_drawSprite(window, object->modsprite->sprite, NULL);
+	if(object->modsprite)
+		sfRenderWindow_drawSprite(window, object->modsprite->sprite, NULL);
 	if(object->Draw)	// custom draw
 		object->Draw(object);
 }

@@ -11,3 +11,7 @@ ModObject* UI_CreateSunCounter();
 /// </summary>
 /// <returns></returns>
 ModObject* UI_CreatePlantBuy();
+
+ModObject* UI_CreateHelp();
+
+ModObject* UI_CreateGameStatus();

@@ -72,19 +72,30 @@ void ModGameInit()
 	/*	Add UI elements	*/
 	ModObject* ui = UI_CreateSunCounter();
 	ModPriorityQueue_Insert(uiObjects, ui, 10);
+
 	ModObject* plantshop = UI_CreatePlantBuy();
 	position.x = MOD_SUNUI_PNG_WIDTH + 10;
 	position.y = 0;
 	ModObject_SetPosition(plantshop, position);
 	ModPriorityQueue_Insert(uiObjects, plantshop, 11);
+
+	ModObject* pausemenu = UI_CreateHelp();
+	ModPriorityQueue_Insert(uiObjects, pausemenu, 0);
+
+	ModObject* gamestatus = UI_CreateGameStatus();
+	ModPriorityQueue_Insert(uiObjects, gamestatus, 0);
 }
 /// <summary>
 /// UI thinks first, then game objects
 /// </summary>
 void ModGameUpdate()
 {
-	gameData.timeDelta = sfTime_asMilliseconds(sfClock_restart(clock)) / 1000.0;
+	if(!gameData.gamePaused)
+		gameData.timeDelta = sfTime_asMilliseconds(sfClock_restart(clock)) / 1000.0;
+	else	//	consume the delta
+		sfTime_asMilliseconds(sfClock_restart(clock)) / 1000.0;
 	gameData.mousepos = sfMouse_getPositionRenderWindow(window);
+	
 	for (int i = 0; i < uiObjects->length; i++)
 	{
 		if (((ModObject*)(ModPriorityQueue_At(uiObjects, i)))->Think != NULL)
@@ -92,6 +103,8 @@ void ModGameUpdate()
 			((ModObject*)(ModPriorityQueue_At(uiObjects, i)))->Think((ModObject*)ModPriorityQueue_At(uiObjects, i));
 		}
 	}
+
+	if (!gameData.gamePaused)
 	for (int i = 0; i < gameObjects->length; i++)
 	{
 		int currentLength = gameObjects->length;

@@ -35,9 +35,14 @@ void SunCounter_Think(ModObject* object)
 	if (!isInitialized)
 	{
 		int size = -1;
+		unsigned char* tempMemory;
 		isInitialized = 1;
 
-		size = FS_LoadFile(MOD_TEXTBOLD_TTF, (void**)&memory);
+		size = FS_LoadFile(MOD_TEXTBOLD_TTF, (void**)&tempMemory);
+		memory = malloc(size);
+		memmove(memory, tempMemory, size);
+		FS_FreeFile(tempMemory);
+
 		if (size == -1)
 			return;
 		font = sfFont_createFromMemory(memory, size);
@@ -69,7 +74,7 @@ void SunCounter_Destroy(ModObject* object)
 {
 	sfFont_destroy(((ModList*)(object->data))->elements[0]);
 	sfText_destroy(((ModList*)(object->data))->elements[1]);
-	FS_FreeFile(((ModList*)(object->data))->elements[2]);
+	free(((ModList*)(object->data))->elements[2]);
 }
 ModObject* UI_CreateSunCounter()
 {
@@ -205,5 +210,98 @@ ModObject* UI_CreatePlantBuy() {
 	ModObject_Resize(ui, scale);
 
 	ui->Think = PlantBuy_Think;
+	return ui;
+}
+
+void MenuThink(ModObject* object) {
+	static int isInitialized = 0;
+
+	ModList* list = (ModList*)(object->data);
+	sfFont* font = (sfFont*)(list->elements[0]);
+	sfText* text = (sfText*)(list->elements[1]);
+	unsigned char* memory = (char*)(list->elements[2]);
+
+	if (!isInitialized)
+	{
+		int size = -1;
+		unsigned char* tempMemory;
+		isInitialized = 1;
+
+		size = FS_LoadFile(MOD_TEXTBOLD_TTF, (void**)&tempMemory);
+		memory = malloc(size);
+		memmove(memory, tempMemory, size);
+		FS_FreeFile(tempMemory);
+		if (size == -1)
+			return;
+		font = sfFont_createFromMemory(memory, size);
+
+		text = sfText_create();
+		sfText_setFont(text, font);
+		sfText_setFillColor(text, sfBlack);
+		sfText_setCharacterSize(text, 24);
+		sfVector2f pos;
+		pos.x = 30;
+		pos.y = 90;
+		sfText_setPosition(text, pos);
+
+		((ModList*)(object->data))->elements[0] = font;
+		((ModList*)(object->data))->elements[1] = text;
+		((ModList*)(object->data))->elements[2] = memory;
+
+		char buffer[512];
+		sprintf(buffer, "Collect sun using your mouse.\n\
+Move the mouse and click on a grid to place a plant.\n\
+Use the arrow keys to change the plant.\n\
+You can buy a plant when you have enough sun.\n\
+You lose the game if the zombies reach your house." );
+		sfText_setString(text, buffer);
+	}
+
+	if (gameData.menuReleased)
+	{
+		gameData.gamePaused = !gameData.gamePaused;
+		object->shouldDraw = gameData.gamePaused;
+	}
+	
+}
+void MenuDraw(ModObject* object) {
+	ModList* list = (ModList*)(object->data);
+	sfText* text = (sfText*)(list->elements[1]);
+	sfRenderWindow_drawText(window, text, NULL);
+}
+void MenuDestroy(ModObject* object) {
+	sfFont_destroy(((ModList*)(object->data))->elements[0]);
+	sfText_destroy(((ModList*)(object->data))->elements[1]);
+	free(((ModList*)(object->data))->elements[2]);
+}
+ModObject* UI_CreateHelp() {
+	ModObject* ui = ModObject_CreateNoSprite();
+
+	/*	Using data to represent a list	*/
+	ui->data = ModList_Create();
+	ModList_Append(ui->data, NULL);		//	sfFont*
+	ModList_Append(ui->data, NULL);		//	sfText*
+	ModList_Append(ui->data, NULL);		//	unsigned char*
+
+	ui->Think = MenuThink;
+	ui->Draw = MenuDraw;
+	ui->Destroy = MenuDestroy;
+	return ui;
+}
+
+void GameStatusThink(ModObject* object) {
+	if (gameData.gameLost)
+	{
+		object->shouldDraw = 1;
+	}
+}
+ModObject* UI_CreateGameStatus() {
+	ModObject* ui = ModObject_Create(MOD_LOSE_PNG);
+	sfVector2f scale;
+	scale.x = (float)MOD_WINDOW_WIDTH / MOD_LOSE_PNG_WIDTH;
+	scale.y = (float)MOD_WINDOW_HEIGHT / MOD_LOSE_PNG_HEIGHT;
+	ModObject_Resize(ui, scale);
+	ui->Think = GameStatusThink;
+	ui->shouldDraw = 0;
 	return ui;
 }

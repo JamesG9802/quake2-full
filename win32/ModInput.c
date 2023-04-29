@@ -85,6 +85,19 @@ void ModInput_Update()
 		gameData.rightDown = 0;
 		gameData.rightReleased = 0;
 	}
+	//	MENU
+	if (isPressed(menu)) {
+		gameData.menuDown = 1;
+		gameData.menuReleased = 0;
+	}
+	else if (gameData.menuDown == 1) {
+		gameData.menuDown = 0;
+		gameData.menuReleased = 1;
+	}
+	else {
+		gameData.menuDown = 0;
+		gameData.menuReleased = 0;
+	}
 }
 void ModInput_Rebind(const char* key, const char* command)
 {
@@ -98,6 +111,8 @@ void ModInput_Rebind(const char* key, const char* command)
 		left = ModInput_ConvertToInput(key);
 	else if (strcmp(command, "right") == 0)
 		right = ModInput_ConvertToInput(key);
+	else if (strcmp(command, "menu") == 0)
+		menu = ModInput_ConvertToInput(key);
 }
 
 sfKeyCode stringToKeyCode(const char* string, int length)

@@ -209,7 +209,7 @@ void GameThink(ModObject* object) {
 	static double difficulty = 0;
 
 	time += gameData.timeDelta;
-	difficulty += gameData.timeDelta;
+	difficulty += .5 * gameData.timeDelta;
 
 	if ((int)(time) % 8 == 0)
 	{
@@ -218,7 +218,7 @@ void GameThink(ModObject* object) {
 		{
 			int x = MOD_GRID_COLS + 1;
 			int y = (int)((((float)rand() / (float)(RAND_MAX / MOD_GRID_ROWS))));
-			printf("Zombie %d %d\n", x, y);
+			
 
 			ModObject* zombie = NULL;
 			if ((float)rand() / (float)RAND_MAX >.5 && initDifficulty > 6)
@@ -246,8 +246,11 @@ void GameThink(ModObject* object) {
 				zombie = CreateZombie(MOD_ZOMBIE_FOOTBALL);
 				initDifficulty -= 32;
 			}
-			if(zombie)
+			if (zombie)
+			{
+				printf("Zombie %d %d\n", x, y);
 				PlaceZombie(zombie, x, y);
+			}
 		}
 		sfVector2f pos;
 		pos.x = (float)rand() / (float)RAND_MAX * MOD_WINDOW_WIDTH * .9 + 10;

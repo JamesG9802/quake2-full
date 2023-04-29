@@ -66,6 +66,8 @@ void ZombieThink(ModObject* object) {
 		DamagePlant(object, gameData.plantGrid[y][x]);
 		return;
 	}
+	if (object->position.x < 0)
+		gameData.gameLost = 1;
 
 	double speed = *((double*)((ModList*)(object->data))->elements[2]);	//	grid per seconds
 	speed *= MOD_GRID_WIDTH;
