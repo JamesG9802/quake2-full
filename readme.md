@@ -1,15 +1,15 @@
 # Plants vs Zombies
-This is a modified version of Quake 2, originally designed by Id Software, to run a variant of the game known as Plants vs Zombies. Due to the extensive differents between Plants vs Zombies and Quake 2, the executable has been modified. As such, you can only run this mod by launching through our shortcut which will automatically launch our mod. It is possible to mod this executable just like Quake 2, though you may need to examine the engine changes to determine what you can modify.    
+This is a modified version of Quake 2, originally designed by Id Software, to run a variant of the game known as Plants vs Zombies. Due to the extensive differences between Plants vs Zombies and Quake 2, the executable has been modified. As such, you can only run this mod by launching through our shortcut which will automatically launch our mod. It is possible to mod this executable just like Quake 2, though you may need to examine the engine changes to determine what you can modify.    
 
 ## Installation
 You can download a working version of this mod through the Releases tab in this repository. Afterwards, you can launch the mod by double clicking the shortcut. 
 
 ## Playing the game
-Like in Plants vs Zombies, you have a grid where you can place plants to defend yourself from zombies. All plants require sun to be placed. Sun is only produced by sunflowers and intermittedly from the sky. You lose the game if zombies manage to travel all the way to your house. Zombies will spawn in increasing number and strength as time progresses.
+Like in Plants vs Zombies, you have a grid where you can place plants to defend yourself from zombies. All plants require sun to be placed. Sun is only produced by sunflowers and intermittently from the sky. You lose the game if zombies manage to travel all the way to your house. Zombies will spawn in increasing number and strength as time progresses.
 ## Controls
 Left Click - place plant
 Left and Right Arrows - change currently selected plant in shop.
-Escape - pause the game and show help screen.
+Escape - pause the game and show a help screen.
 
 You can rebind controls through config.cfg.
 ## Plants
@@ -59,5 +59,6 @@ Thanks to Robert Duffy for doing the grunt work of building this release.
 
 John Carmack
 Id Software
+
 
 
