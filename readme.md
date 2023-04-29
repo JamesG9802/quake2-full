@@ -6,7 +6,12 @@ You can download a working version of this mod through the Releases tab in this 
 
 ## Playing the game
 Like in Plants vs Zombies, you have a grid where you can place plants to defend yourself from zombies. All plants require sun to be placed. Sun is only produced by sunflowers and intermittedly from the sky. You lose the game if zombies manage to travel all the way to your house. Zombies will spawn in increasing number and strength as time progresses.
+## Controls
+Left Click - place plant
+Left and Right Arrows - change currently selected plant in shop.
+Escape - pause the game and show help screen.
 
+You can rebind controls through config.cfg.
 ## Plants
 There are 10 plants and they are described as follows:
 - Sunflower: 50 sun | Produces sun. 
