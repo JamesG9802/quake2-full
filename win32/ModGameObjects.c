@@ -169,7 +169,46 @@ ModObject* tryBuyPlant(int plant) {
 	}
 	return NULL;
 }
+void LawnmowerThink(ModObject* object) {
+	sfVector2f position = object->position;
+	position.x += MOD_PROJECTILE_SPEED_NORMAL * MOD_GRID_WIDTH * gameData.timeDelta;
+	ModObject_SetPosition(object, position);
+
+	float x = object->position.x;
+	float y = object->position.y;
+	for (int i = 0; i < gameObjects->length; i++)
+	{
+		if (((ModObject*)(gameObjects->elements[i]))->className &&
+			strcmp(((ModObject*)(gameObjects->elements[i]))->className, MOD_CLASS_ZOMBIE) == 0)
+		{
+			float zx = ((ModObject*)(gameObjects->elements[i]))->position.x;
+			float zy = ((ModObject*)(gameObjects->elements[i]))->position.y;
+			if (zx >= x  && zx <= x + MOD_PLANT_PNG_WIDTH &&
+				zy >= y && zy <= y + MOD_PLANT_PNG_HEIGHT)
+			{
+				DamageZombie(gameObjects->elements[i], MOD_DAMAGE_INSTANTKILL);
+				break;
+			}
+		}
+	}
+
+	if (position.x > MOD_WINDOW_WIDTH) {
+		ModList_RemoveC(gameObjects, object);
+		ModObject_Destroy(object);
+	}
+}
+ModObject* CreateLawnmower() {
+	ModObject* object = ModObject_Create(MOD_CONSUMABLE_LAWNMOWER_PNG);
+	sfVector2f scale;
+	scale.x = (float)MOD_GRID_WIDTH / MOD_CONSUMABLE_PNG_WIDTH;
+	scale.y = (float)MOD_GRID_WIDTH / MOD_CONSUMABLE_PNG_HEIGHT;
+	ModObject_Resize(object, scale);
+	object->Think = LawnmowerThink;
+	object->shouldDraw = 1;
+	return object;
+}
 void GridThink(ModObject* object) {
+	static int zombieIndex = 0;
 	if (!object) return;
 
 	sfVector2i mousepos = gameData.mousepos;
@@ -193,15 +232,46 @@ void GridThink(ModObject* object) {
 		if (plant)
 			PlacePlant(plant, x, y);
 	}
-	if (gameData.secondaryReleased)
+	if (gameData.secondaryReleased)	//	consumable resolution for SHOVEL and LAWNMOWER
+
+	{
+		int x = (mousepos.x - MOD_GRID_XPOS) / MOD_GRID_WIDTH;
+		int y = (mousepos.y - MOD_GRID_YPOS) / MOD_GRID_HEIGHT;
+		switch (gameData.currentConsumable)
+		{
+		default: break;
+		case MOD_CONSUMABLE_SHOVEL:
+			
+			if (!gameData.plantGrid[y][x])
+				break;
+			ModList_RemoveC(gameObjects, gameData.plantGrid[y][x]);
+			ModObject_Destroy(gameData.plantGrid[y][x]);
+			gameData.plantGrid[y][x] = NULL;
+			gameData.currentConsumable = MOD_CONSUMABLE_NONE;
+			break;
+		case MOD_CONSUMABLE_LAWNMOWER:
+			;ModObject* lawnmower = CreateLawnmower();
+			sfVector2f position;
+			position.x = MOD_GRID_XPOS;
+			position.y = MOD_GRID_YPOS + MOD_GRID_HEIGHT * y + (MOD_GRID_HEIGHT - MOD_GRID_YPOS) / 2;
+			ModObject_SetPosition(lawnmower, position);
+			ModList_Append(gameObjects, lawnmower);
+			gameData.currentConsumable = MOD_CONSUMABLE_NONE;
+			break;
+		}
+	}
+	if (gameData.debugReleased)
 	{
 		int x = (mousepos.x - MOD_GRID_XPOS) / MOD_GRID_WIDTH;
 		int y = (mousepos.y - MOD_GRID_YPOS) / MOD_GRID_HEIGHT;
 		printf("Zombie %d %d\n", x, y);
-		ModObject* zombie = CreateZombie(MOD_ZOMBIE_REGULAR);
+		ModObject* zombie = CreateZombie(zombieIndex);
 		if (zombie == NULL)
 			printf("NULL");
 		PlaceZombie(zombie, x, y);
+		zombieIndex++;
+		if (zombieIndex > MOD_ZOMBIE_FOOTBALL)
+			zombieIndex = MOD_ZOMBIE_REGULAR;
 	}
 }
 void GameThink(ModObject* object) {
@@ -210,13 +280,13 @@ void GameThink(ModObject* object) {
 
 	time += gameData.timeDelta;
 	difficulty += .5 * gameData.timeDelta;
-
+	int xOffset = 0;
 	if ((int)(time) % 8 == 0)
 	{
 		time++;
 		for (double initDifficulty = difficulty; initDifficulty > 0; initDifficulty--)
 		{
-			int x = MOD_GRID_COLS + 1;
+			int x = MOD_GRID_COLS + 1 + xOffset;
 			int y = (int)((((float)rand() / (float)(RAND_MAX / MOD_GRID_ROWS))));
 			
 
@@ -251,6 +321,7 @@ void GameThink(ModObject* object) {
 				printf("Zombie %d %d\n", x, y);
 				PlaceZombie(zombie, x, y);
 			}
+			xOffset += 2;
 		}
 		sfVector2f pos;
 		pos.x = (float)rand() / (float)RAND_MAX * MOD_WINDOW_WIDTH * .9 + 10;
@@ -258,5 +329,57 @@ void GameThink(ModObject* object) {
 		ModObject* sun = CreateSun();
 		ModObject_SetPosition(sun, pos);
 		ModList_Append(gameObjects, sun);
+	}
+
+	if (gameData.debugReleased) {	//	debug add powerup
+		gameData.currentConsumable++;
+		if (gameData.currentConsumable > MOD_HIGHEST_CONSUMABLE_INDEX)
+			gameData.currentConsumable = MOD_LOWEST_CONSUMABLE_INDEX;
+		printf("Current consumable == %d\n", gameData.currentConsumable);
+	}
+	if (gameData.secondaryReleased) {
+		//	Consumable Resolution for SUN, PUSH ZOMBIE, & FREEZE ZOMBIE
+		switch (gameData.currentConsumable)
+		{
+		default: break;
+		case MOD_CONSUMABLE_SUN:
+			for (int i = 0;i < 4; i++) {
+				sfVector2f pos;
+				pos.x = (float)rand() / (float)RAND_MAX * MOD_WINDOW_WIDTH * .9 + 10;
+				pos.y = (float)rand() / (float)RAND_MAX * MOD_WINDOW_HEIGHT * .9 + 10;
+				ModObject* sun = CreateSun();
+				ModObject_SetPosition(sun, pos);
+				ModList_Append(gameObjects, sun);
+			}
+			gameData.currentConsumable = MOD_CONSUMABLE_NONE;
+			break;
+		case MOD_CONSUMABLE_PUSHZOMBIE:
+			for (int i = 0; i < gameObjects->length; i++)
+			{
+				if (((ModObject*)(gameObjects->elements[i]))->className &&
+					strcmp(((ModObject*)(gameObjects->elements[i]))->className, MOD_CLASS_ZOMBIE) == 0)
+				{
+					sfVector2f position;
+					position.x = ((ModObject*)(gameObjects->elements[i]))->position.x;
+					position.y = ((ModObject*)(gameObjects->elements[i]))->position.y;
+					position.x += 300;
+					ModObject_SetPosition(((ModObject*)(gameObjects->elements[i])), position);
+				}
+			}
+			gameData.currentConsumable = MOD_CONSUMABLE_NONE;
+			break;
+		case MOD_CONSUMABLE_FREEZEZOMBIE:
+			for (int i = 0; i < gameObjects->length; i++)
+			{
+				ModObject* zombie = gameObjects->elements[i];
+				if (((ModObject*)(gameObjects->elements[i]))->className &&
+					strcmp(((ModObject*)(gameObjects->elements[i]))->className, MOD_CLASS_ZOMBIE) == 0)
+				{
+					*((double*)((ModList*)(zombie->data))->elements[3]) = MOD_ZOMBIE_STATUS_FREEZE;
+				}
+			}
+			gameData.currentConsumable = MOD_CONSUMABLE_NONE;
+			break;
+		}
 	}
 }

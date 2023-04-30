@@ -252,6 +252,7 @@ void MenuThink(ModObject* object) {
 		sprintf(buffer, "Collect sun using your mouse.\n\
 Move the mouse and click on a grid to place a plant.\n\
 Use the arrow keys to change the plant.\n\
+Use the spacebar to use consummables.\n\
 You can buy a plant when you have enough sun.\n\
 You lose the game if the zombies reach your house." );
 		sfText_setString(text, buffer);
@@ -303,5 +304,52 @@ ModObject* UI_CreateGameStatus() {
 	ModObject_Resize(ui, scale);
 	ui->Think = GameStatusThink;
 	ui->shouldDraw = 0;
+	return ui;
+}
+
+
+void ConsumableDisplayThink(ModObject* object) {
+	static int currentConsumable = MOD_CONSUMABLE_NONE;
+	if (currentConsumable == gameData.currentConsumable)
+		return;
+	currentConsumable = gameData.currentConsumable;
+	ModSprite* sprite = NULL;
+	sfVector2f scale = sfSprite_getScale(object->modsprite->sprite);
+	sfVector2f pos = object->position;
+	switch (currentConsumable)
+	{
+	default:
+	case MOD_CONSUMABLE_NONE:
+		sprite = ModSprite_Create(MOD_NOTHING_PNG);
+		break;
+	case MOD_CONSUMABLE_SUN:
+		sprite = ModSprite_Create(MOD_CONSUMABLE_SUN_PNG);
+		break;
+	case MOD_CONSUMABLE_SHOVEL:
+		sprite = ModSprite_Create(MOD_CONSUMABLE_SHOVEL_PNG);
+		break;
+	case MOD_CONSUMABLE_PUSHZOMBIE:
+		sprite = ModSprite_Create(MOD_CONSUMABLE_PUSHZOMBIE_PNG);
+		break;
+	case MOD_CONSUMABLE_LAWNMOWER:
+		sprite = ModSprite_Create(MOD_CONSUMABLE_LAWNMOWER_PNG);
+		break;
+	case MOD_CONSUMABLE_FREEZEZOMBIE:
+		sprite = ModSprite_Create(MOD_CONSUMABLE_FREEZEZOMBIE_PNG);
+		break;
+	}
+	ModSprite_Destroy(object->modsprite);
+	object->modsprite = sprite;
+	ModObject_Resize(object, scale);
+	ModObject_SetPosition(object, pos);
+}
+ModObject* UI_CreateConsumableDisplay() {
+	ModObject* ui = ModObject_Create(MOD_NOTHING_PNG);
+	sfVector2f scale;
+	scale.x = (float)MOD_GRID_WIDTH / MOD_CONSUMABLE_PNG_WIDTH;
+	scale.y = (float)MOD_GRID_WIDTH / MOD_CONSUMABLE_PNG_HEIGHT;
+	ModObject_Resize(ui, scale);
+
+	ui->Think = ConsumableDisplayThink;
 	return ui;
 }

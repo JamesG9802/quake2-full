@@ -39,6 +39,10 @@
 
 #define MOD_LOSE_PNG_WIDTH	2048
 #define MOD_LOSE_PNG_HEIGHT	1292
+
+#define MOD_CONSUMABLE_PNG_WIDTH 100
+#define MOD_CONSUMABLE_PNG_HEIGHT 100
+
 /*	Game Information	*/
 #define MOD_GRID_ROWS 5
 #define MOD_GRID_COLS 9
@@ -104,10 +108,25 @@
 
 #define MOD_PROJECTILE_SPEED_NORMAL	4	//	grid width per seconds
 
+#define MOD_CONSUMABLE_NONE	0
+#define MOD_CONSUMABLE_SUN	1
+#define MOD_CONSUMABLE_SHOVEL	2
+#define MOD_CONSUMABLE_PUSHZOMBIE	3
+#define MOD_CONSUMABLE_LAWNMOWER	4
+#define MOD_CONSUMABLE_FREEZEZOMBIE	5
+
+#define MOD_ZOMBIE_STATUS_NORMAL	0
+#define MOD_ZOMBIE_STATUS_FREEZE	5
+
+#define MOD_LOWEST_CONSUMABLE_INDEX	MOD_CONSUMABLE_SUN
+#define MOD_HIGHEST_CONSUMABLE_INDEX	MOD_CONSUMABLE_FREEZEZOMBIE
+
 /*	Class Information	*/
 #define MOD_CLASS_ZOMBIE	"zombie"
 #define MOD_CLASS_PROJECTILE	"projectile"
 /*	Pictures	*/
+
+#define MOD_NOTHING_PNG	"pics/nothing.png"
 
 #define MOD_BACKGROUND_PNG	"pics/lawn.png"
 #define MOD_GRIDGLOW_PNG	"pics/gridglow.png"
@@ -135,6 +154,12 @@
 #define MOD_FIREPEA_PNG	"pics/proj1.png"
 
 #define MOD_LOSE_PNG "pics/lose.png"
+
+#define MOD_CONSUMABLE_SUN_PNG	"pics/cons0.png"
+#define MOD_CONSUMABLE_SHOVEL_PNG	"pics/cons1.png"
+#define MOD_CONSUMABLE_PUSHZOMBIE_PNG	"pics/cons2.png"
+#define MOD_CONSUMABLE_LAWNMOWER_PNG	"pics/cons3.png"
+#define MOD_CONSUMABLE_FREEZEZOMBIE_PNG	"pics/cons4.png"
 
 /*	Fonts	*/
 #define MOD_TEXT_TTF		"fonts/cour.ttf"

@@ -26,6 +26,7 @@ sfInput secondary;
 sfInput left;
 sfInput right;
 sfInput menu;
+sfInput debug;
 
 /// <summary>
 /// Queue inputs to execute.

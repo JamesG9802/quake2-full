@@ -7,6 +7,7 @@
 typedef struct GameData {
 	long sunAmt;						//	how much sun the player has
 	int currentPlant;					//	the current plant the player can buy
+	int currentConsumable;				//	the current consumable the player has
 	float timeDelta;					//	time since last frame
 	unsigned char gamePaused;			//	is the game paused
 	unsigned char gameLost;				//	did the player lose
@@ -21,6 +22,8 @@ typedef struct GameData {
 	unsigned char rightReleased;		//	is right action released
 	unsigned char menuDown;				//	is menu action activated
 	unsigned char menuReleased;			//	is menu action released
+	unsigned char debugDown;			//	is debug action activated
+	unsigned char debugReleased;		//	is debug action released
 	ModObject* plantGrid[MOD_GRID_ROWS][MOD_GRID_COLS];	//	grid of plants
 } GameData;
 

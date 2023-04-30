@@ -15,3 +15,5 @@ ModObject* UI_CreatePlantBuy();
 ModObject* UI_CreateHelp();
 
 ModObject* UI_CreateGameStatus();
+
+ModObject* UI_CreateConsumableDisplay();

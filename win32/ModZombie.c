@@ -38,9 +38,20 @@ void ZombieThink(ModObject* object) {
 		{
 			ModList_RemoveC(gameObjects, object);
 			ModObject_Destroy(object);
+			if(gameData.currentConsumable == MOD_CONSUMABLE_NONE)
+				gameData.currentConsumable = (int)((float)rand() / (float)(RAND_MAX / 5)) + 1;
 			return;
 		}
 	}
+	double* status = ((double*)((ModList*)(object->data))->elements[3]);	//	grid per seconds
+	if (*status > 0)
+	{
+		sfColor color = sfColor_fromRGB(22, 209, 242);
+		sfSprite_setColor(object->modsprite->sprite, color);
+		*status -= gameData.timeDelta;
+		return;
+	}
+
 	int colorSpeed = 1024;
 	sfColor color = sfSprite_getColor(object->modsprite->sprite);
 	if ((unsigned char)(color.r + colorSpeed * gameData.timeDelta) < color.r)
@@ -70,6 +81,7 @@ void ZombieThink(ModObject* object) {
 		gameData.gameLost = 1;
 
 	double speed = *((double*)((ModList*)(object->data))->elements[2]);	//	grid per seconds
+
 	speed *= MOD_GRID_WIDTH;
 	pos.x = object->position.x - gameData.timeDelta * speed;
 	pos.y = object->position.y;
@@ -88,6 +100,7 @@ ModObject* CreateZombie(int zombie) {
 	double* health;
 	double* damage;
 	double* speed;
+	double* status;
 	switch (zombie) {
 	case MOD_ZOMBIE_REGULAR:
 		object = ModObject_Create(MOD_ZOMBIE_REGULAR_PNG);
@@ -97,14 +110,17 @@ ModObject* CreateZombie(int zombie) {
 		health = malloc(sizeof(double));
 		damage = malloc(sizeof(double));
 		speed = malloc(sizeof(double));
+		status = malloc(sizeof(double));
 
 		*health = MOD_ZOMBIE_HEALTH_LOW;
 		*damage = MOD_ZOMBIE_DAMAGE_NORMAL;
 		*speed = MOD_ZOMBIE_SPEED_NORMAL;
+		*status = MOD_ZOMBIE_STATUS_NORMAL;
 
 		ModList_Append(object->data, health);
 		ModList_Append(object->data, damage);
 		ModList_Append(object->data, speed);
+		ModList_Append(object->data, status);
 
 		object->Think = ZombieThink;
 		object->Destroy = ZombieDestroy;
@@ -118,14 +134,17 @@ ModObject* CreateZombie(int zombie) {
 		health = malloc(sizeof(double));
 		damage = malloc(sizeof(double));
 		speed = malloc(sizeof(double));
+		status = malloc(sizeof(double));
 
 		*health = MOD_ZOMBIE_HEALTH_NORMAL;
 		*damage = MOD_ZOMBIE_DAMAGE_NORMAL;
 		*speed = MOD_ZOMBIE_SPEED_NORMAL;
-
+		*status = MOD_ZOMBIE_STATUS_NORMAL;
+		
 		ModList_Append(object->data, health);
 		ModList_Append(object->data, damage);
 		ModList_Append(object->data, speed);
+		ModList_Append(object->data, status);
 
 		object->Think = ZombieThink;
 		object->Destroy = ZombieDestroy;
@@ -139,14 +158,17 @@ ModObject* CreateZombie(int zombie) {
 		health = malloc(sizeof(double));
 		damage = malloc(sizeof(double));
 		speed = malloc(sizeof(double));
+		status = malloc(sizeof(double));
 
 		*health = MOD_ZOMBIE_HEALTH_HIGH;
 		*damage = MOD_ZOMBIE_DAMAGE_NORMAL;
 		*speed = MOD_ZOMBIE_SPEED_NORMAL;
+		*status = MOD_ZOMBIE_STATUS_NORMAL;
 
 		ModList_Append(object->data, health);
 		ModList_Append(object->data, damage);
 		ModList_Append(object->data, speed);
+		ModList_Append(object->data, status);
 
 		object->Think = ZombieThink;
 		object->Destroy = ZombieDestroy;
@@ -160,14 +182,17 @@ ModObject* CreateZombie(int zombie) {
 		health = malloc(sizeof(double));
 		damage = malloc(sizeof(double));
 		speed = malloc(sizeof(double));
+		status = malloc(sizeof(double));
 
 		*health = MOD_ZOMBIE_HEALTH_NORMAL;
 		*damage = MOD_ZOMBIE_DAMAGE_NORMAL;
 		*speed = MOD_ZOMBIE_SPEED_HIGH;
+		*status = MOD_ZOMBIE_STATUS_NORMAL;
 
 		ModList_Append(object->data, health);
 		ModList_Append(object->data, damage);
 		ModList_Append(object->data, speed);
+		ModList_Append(object->data, status);
 
 		object->Think = ZombieThink;
 		object->Destroy = ZombieDestroy;
@@ -181,14 +206,17 @@ ModObject* CreateZombie(int zombie) {
 		health = malloc(sizeof(double));
 		damage = malloc(sizeof(double));
 		speed = malloc(sizeof(double));
+		status = malloc(sizeof(double));
 
 		*health = MOD_ZOMBIE_HEALTH_HIGH;
 		*damage = MOD_ZOMBIE_DAMAGE_NORMAL;
 		*speed = MOD_ZOMBIE_SPEED_HIGH;
+		*status = MOD_ZOMBIE_STATUS_NORMAL;
 
 		ModList_Append(object->data, health);
 		ModList_Append(object->data, damage);
 		ModList_Append(object->data, speed);
+		ModList_Append(object->data, status);
 
 		object->Think = ZombieThink;
 		object->Destroy = ZombieDestroy;
