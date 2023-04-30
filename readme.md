@@ -5,12 +5,12 @@ This is a modified version of Quake 2, originally designed by Id Software, to ru
 You can download a working version of this mod through the Releases tab in this repository. Afterwards, you can launch the mod by double clicking the shortcut. 
 
 ## Playing the game
-Like in Plants vs Zombies, you have a grid where you can place plants to defend yourself from zombies. All plants require sun to be placed. Sun is only produced by sunflowers and intermittently from the sky. You lose the game if zombies manage to travel all the way to your house. Zombies will spawn in increasing number and strength as time progresses.
+Like in Plants vs Zombies, you have a grid where you can place plants to defend yourself from zombies. All plants require sun to be placed. Sun is only produced by sunflowers and intermittently from the sky. You lose the game if zombies manage to travel all the way to your house. Zombies will spawn in increasing number and strength as time progresses. Due to difficulty increases, zombies drop consumable items that can activated with the spacebar.
 ## Controls
 Left Click - place plant
 Left and Right Arrows - change currently selected plant in shop.
 Escape - pause the game and show a help screen.
-
+Spacebar - activate consumable, if any
 You can rebind controls through config.cfg.
 ## Plants
 There are 10 plants and they are described as follows:
@@ -31,7 +31,12 @@ There are 5 zombies and they are described as follows:
 - Bucket Zombie: Average speed and very high health
 - Flag Zombie: High speed and average health
 - Football Zombie: High speed and very high health
-
+## Consumables 
+- Sun Card: Spawns 100 sun.
+- Shovel: Remove a plant.
+- Push Zombies: Move all zombies backward
+- Lawnmower: Send a lawnmower to clear a row
+- Freeze Zombies: Stop all zombies from moving and attacking for 5 seconds.
 # Original License terms by Id Software
 This is the complete source code for Quake 2, version 3.19, buildable with
 visual C++ 6.0.  The linux version should be buildable, but we haven't
