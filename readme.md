@@ -4,13 +4,18 @@ This is a modified version of Quake 2, originally designed by Id Software, to ru
 ## Installation
 You can download a working version of this mod through the Releases tab in this repository. Afterwards, you can launch the mod by double clicking the shortcut. 
 
+You may need to retarget the shortcut to run the mod. On Windows, this can be done either by modifying the shortcut to the file path where you the 'quake2.exe' is on your local hard drive. Or you can right click the executable and 'Create Shortcut'. Then you right click the shortcut and select 'Properties'. Then under the 'Target' field, you add **+set game IT266** at the end of the text.
+
+For example, the default shortcut target is **"C:\GOG Games\quake2-full-release\quake2.exe" +set game IT266**.
+If you installed the executable in **"C:\quake2.exe"**, you set the target to **"C:\quake2.exe" +set game IT266"**.
+
 ## Playing the game
 Like in Plants vs Zombies, you have a grid where you can place plants to defend yourself from zombies. All plants require sun to be placed. Sun is only produced by sunflowers and intermittently from the sky. You lose the game if zombies manage to travel all the way to your house. Zombies will spawn in increasing number and strength as time progresses. Due to difficulty increases, zombies drop consumable items that can activated with the spacebar.
 ## Controls
-Left Click - place plant
-Left and Right Arrows - change currently selected plant in shop.
-Escape - pause the game and show a help screen.
-Spacebar - activate consumable, if any
+- Left Click - place plant
+- Left and Right Arrows - change currently selected plant in shop.
+- Escape - pause the game and show a help screen.
+- Spacebar - activate consumable, if any
 You can rebind controls through config.cfg.
 ## Plants
 There are 10 plants and they are described as follows:
